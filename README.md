@@ -38,7 +38,19 @@ Abre la terminal y prueba estos comandos:
 *   `help`: Muestra la lista de comandos.
 *   `whoami`: Muestra el usuario actual.
 *   `matrix`: Activa el efecto de lluvia de código.
-*   `hack`: Simula una secuencia de hackeo.
+*   `hack`: Simula una secuencia de hackeo básica.
+*   `hackme`: ⚠️ **¡ADVERTENCIA!** Simula un hackeo masivo del sistema (Prueba bajo tu propio riesgo).
+*   `thanos` / `delete`: Chasquea los dedos y borra el universo (recarga la página).
+*   `destroy`: Simula un fallo crítico del kernel.
+*   `cat`: Muestra gatitos ASCII aleatorios 🐱
+*   `coffee`: ¿Necesitas cafeína? ☕
+*   `party`: ¡Fiesta de confeti! 🎉
+*   `weather`: Reportes del clima absurdos.
+*   `future`: Predice tu futuro como desarrollador.
+*   `linux`: El mejor OS (según Tux).
+*   `love`: Un poco de amor para tu terminal. ❤️
+*   `ping`: Pong! 🏓
+*   `clippy`: El asistente que nadie pidió, pero todos extrañan.
 *   `clear`: Limpia la pantalla.
 
 ## 💿 Instalación y Uso
