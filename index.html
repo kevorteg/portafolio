@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/core.css">
+    <link rel="stylesheet" href="css/apps.css">
+    <title>Portafolio</title>
+</head>
+
+<body onclick="hideAllModals()">
+
+    <div id="brightness-overlay"></div>
+    <canvas id="matrix-canvas" class="fixed inset-0 z-[9000] pointer-events-none hidden"></canvas>
+
+    <!-- Boot Screen -->
+    <div id="boot-screen"
+        class="fixed inset-0 bg-black z-[9999] flex flex-col items-center justify-center transition-opacity duration-1000">
+        <div class="w-24 h-24 bg-white rounded-2xl flex items-center justify-center mb-8 animate-pulse">
+            <i class="fab fa-apple text-6xl text-black"></i>
+        </div>
+        <div class="w-48 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+            <div class="h-full bg-white animate-[loading_2s_ease-in-out_forwards] w-0"></div>
+        </div>
+
+        <style>
+            @keyframes loading {
+                0% {
+                    width: 0%;
+                }
+
+                100% {
+                    width: 100%;
+                }
+            }
+        </style>
+    </div>
+
+    <!-- Lock Screen -->
+    <div id="lock-screen">
+        <div class="bg-black/30 absolute inset-0"></div>
+        <div class="relative z-10 flex flex-col items-center" id="lock-container">
+            <div
+                class="w-24 h-24 rounded-full bg-white/10 border border-white/30 flex items-center justify-center mb-6 shadow-2xl backdrop-blur-md">
+                <i class="fas fa-user text-white text-4xl"></i>
+            </div>
+            <h1 id="lock-username" class="text-3xl font-bold text-white mb-10">Kevin</h1>
+            <div class="relative w-64">
+                <input type="password" id="lock-password" placeholder="Cualquier clave para entrar"
+                    class="w-full bg-white/10 border border-white/20 rounded-full px-5 py-2.5 text-white text-center outline-none focus:bg-white/20 transition-all placeholder:text-white/30"
+                    onkeydown="if(event.key==='Enter') unlock()">
+                <button onclick="unlock()"
+                    class="absolute right-2 top-2 w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-white/60">
+                    <i class="fas fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+            <div id="lock-error-msg" class="text-red-400 text-xs mt-4 font-bold opacity-0 transition-opacity">
+                Contraseña incorrecta. Inténtalo de nuevo.</div>
+        </div>
+    </div>
+
+    <!-- Utilities (Hidden/Overlay) -->
+    <div id="spotlight" onclick="event.stopPropagation()">
+        <div class="flex items-center gap-4 px-2">
+            <i class="fas fa-search text-white/40 text-xl"></i>
+            <input type="text" id="spotlight-input" placeholder="Buscar en KevinOS"
+                class="bg-transparent text-white text-2xl outline-none w-full font-light"
+                onkeydown="handleSpotlight(event)">
+        </div>
+    </div>
+
+    <div id="context-menu" onclick="event.stopPropagation()">
+        <div class="menu-item" onclick="nextWallpaper()"><i class="fas fa-image"></i> Cambiar Fondo</div>
+        <div class="h-[0.5px] bg-white/10 my-1 mx-2"></div>
+        <div class="menu-item" onclick="openApp('about')"><i class="fas fa-info-circle"></i> Acerca de este OS</div>
+    </div>
+
+    <div id="control-center" onclick="event.stopPropagation()">
+        <div class="flex gap-4 mb-4">
+            <div class="cc-tile w-1/2 flex flex-col gap-2">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white"><i
+                            class="fas fa-wifi"></i></div><span class="text-xs font-bold text-white">Wi-Fi</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white"><i
+                            class="fab fa-bluetooth-b"></i></div><span
+                        class="text-xs font-bold text-white">Bluetooth</span>
+                </div>
+            </div>
+            <div class="cc-tile w-1/2 flex flex-col justify-center items-center gap-2">
+                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white"><i
+                        class="fas fa-moon"></i></div>
+                <span class="text-[10px] text-white">No Molestar</span>
+            </div>
+        </div>
+        <div class="cc-tile mb-2">
+            <div class="text-[10px] text-white mb-2 font-bold">Brillo</div>
+            <input type="range" class="cc-slider cc-slider-brightness" min="0" max="100" value="100">
+        </div>
+        <div class="cc-tile">
+            <div class="text-[10px] text-white mb-2 font-bold">Sonido</div>
+            <input type="range" class="cc-slider cc-slider-volume" min="0" max="100" value="80">
+        </div>
+    </div>
+
+    <div id="launchpad" onclick="toggleLaunchpad()">
+        <div class="launchpad-grid" onclick="event.stopPropagation()">
+            <!-- System Apps -->
+            <div class="launchpad-item" onclick="openApp('finder')">
+                <div class="launchpad-icon bg-blue-500 text-white"><i class="fas fa-face-smile text-4xl"></i></div>
+                <span class="text-white text-sm">Finder</span>
+            </div>
+            <div class="launchpad-item" onclick="openApp('safari')">
+                <div class="launchpad-icon bg-blue-400 text-white"><i class="fas fa-compass text-4xl"></i></div>
+                <span class="text-white text-sm">Safari</span>
+            </div>
+            <div class="launchpad-item" onclick="openApp('terminal')">
+                <div class="launchpad-icon bg-gray-800 text-white"><i class="fas fa-terminal text-3xl"></i></div>
+                <span class="text-white text-sm">Terminal</span>
+            </div>
+            <div class="launchpad-item" onclick="openApp('mail')">
+                <div class="launchpad-icon bg-blue-600 text-white"><i class="fas fa-envelope text-4xl"></i></div>
+                <span class="text-white text-sm">Mail</span>
+            </div>
+            <div class="launchpad-item" onclick="openApp('notes')">
+                <div class="launchpad-icon bg-yellow-400 text-white"><i class="fas fa-note-sticky text-4xl"></i></div>
+                <span class="text-white text-sm">Notas</span>
+            </div>
+            <div class="launchpad-item" onclick="openApp('calculator')">
+                <div class="launchpad-icon bg-gray-700 text-white"><i class="fas fa-calculator text-3xl"></i></div>
+                <span class="text-white text-sm">Calc</span>
+            </div>
+            <div class="launchpad-item" onclick="openApp('appstore')">
+                <div class="launchpad-icon bg-blue-500 text-white"><i class="fas fa-layer-group text-3xl"></i></div>
+                <span class="text-white text-sm">Skills</span>
+            </div>
+            <div class="launchpad-item" onclick="openApp('preview')">
+                <div class="launchpad-icon bg-red-400 text-white"><i class="fas fa-file-pdf text-3xl"></i></div>
+                <span class="text-white text-sm">Vista Previa</span>
+            </div>
+
+            <!-- Other Apps -->
+            <div class="launchpad-item" onclick="openSnake()">
+                <div class="launchpad-icon bg-green-500 text-white"><i class="fas fa-gamepad text-3xl"></i></div>
+                <span class="text-white text-sm">Snake</span>
+            </div>
+            <div class="launchpad-item" onclick="openPong()">
+                <div class="launchpad-icon bg-black text-white border border-white/20"><i
+                        class="fas fa-table-tennis text-3xl"></i></div>
+                <span class="text-white text-sm">Pong</span>
+            </div>
+            <div class="launchpad-item" onclick="openApp('music')">
+                <div class="launchpad-icon bg-red-500 text-white"><i class="fab fa-spotify text-3xl"></i></div>
+                <span class="text-white text-sm">Música</span>
+            </div>
+
+
+            <!-- Design Apps -->
+            <div class="launchpad-item"
+                onclick="openInfo('Photoshop', 'Editor de graficos rasterizados lider en la industria.', 'adobe-photoshop')">
+                <img src="https://img.icons8.com/fluency/96/adobe-photoshop.png" class="launchpad-icon">
+                <span class="text-white text-sm">Photoshop</span>
+            </div>
+            <div class="launchpad-item"
+                onclick="openInfo('Illustrator', 'Editor de graficos vectoriales estandar.', 'adobe-illustrator')">
+                <img src="https://img.icons8.com/fluency/96/adobe-illustrator.png" class="launchpad-icon">
+                <span class="text-white text-sm">Illustrator</span>
+            </div>
+            <div class="launchpad-item"
+                onclick="openInfo('Blender', 'Suite de creacion 3D gratuita y de codigo abierto.', 'blender-3d')">
+                <img src="https://img.icons8.com/fluency/96/blender-3d.png" class="launchpad-icon">
+                <span class="text-white text-sm">Blender</span>
+            </div>
+            <div class="launchpad-item"
+                onclick="openInfo('Premiere', 'Software de edicion de video profesional.', 'adobe-premiere-pro')">
+                <img src="https://img.icons8.com/fluency/96/adobe-premiere-pro.png" class="launchpad-icon">
+                <span class="text-white text-sm">Premiere</span>
+            </div>
+
+            <!-- Programming -->
+            <div class="launchpad-item"
+                onclick="openInfo('HTML5', 'Lenguaje de marcado para la estructura web.', 'html-5--v1')">
+                <img src="https://img.icons8.com/color/96/html-5--v1.png" class="launchpad-icon">
+                <span class="text-white text-sm">HTML</span>
+            </div>
+            <div class="launchpad-item"
+                onclick="openInfo('CSS3', 'Lenguaje de diseño grafico para definir la presentacion.', 'css3')">
+                <img src="https://img.icons8.com/color/96/css3.png" class="launchpad-icon">
+                <span class="text-white text-sm">CSS</span>
+            </div>
+            <div class="launchpad-item"
+                onclick="openInfo('JavaScript', 'Lenguaje de programacion interpretado para la web.', 'javascript--v1')">
+                <img src="https://img.icons8.com/color/96/javascript--v1.png" class="launchpad-icon">
+                <span class="text-white text-sm">JS</span>
+            </div>
+            <div class="launchpad-item"
+                onclick="openInfo('Python', 'Lenguaje de alto nivel para proposito general.', 'python--v1')">
+                <img src="https://img.icons8.com/color/96/python--v1.png" class="launchpad-icon">
+                <span class="text-white text-sm">Python</span>
+            </div>
+            <div class="launchpad-item"
+                onclick="openInfo('VS Code', 'Editor de codigo fuente desarrollado por Microsoft.', 'visual-studio-code-2019')">
+                <img src="https://img.icons8.com/fluency/96/visual-studio-code-2019.png" class="launchpad-icon">
+                <span class="text-white text-sm">VS Code</span>
+            </div>
+
+            <!-- AI -->
+            <div class="launchpad-item"
+                onclick="openInfo('ChatGPT', 'Modelo de lenguaje desarrollado por OpenAI.', 'chatgpt')">
+                <img src="https://img.icons8.com/fluency/96/chatgpt.png" class="launchpad-icon">
+                <span class="text-white text-sm">ChatGPT</span>
+            </div>
+            <div class="launchpad-item"
+                onclick="openInfo('Gemini', 'Familia de modelos de IA multimodal de Google.', 'google-logo')">
+                <img src="https://img.icons8.com/fluency/96/google-logo.png" class="launchpad-icon">
+                <span class="text-white text-sm">Gemini</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Desktop -->
+    <div id="desktop" class="desktop" onclick="hideAllModals()" oncontextmenu="showContextMenu(event)">
+
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="flex items-center gap-4">
+                <i class="fab fa-apple text-lg cursor-pointer hover:opacity-80"
+                    onclick="event.stopPropagation(); openApp('about')"></i>
+                <span class="font-bold cursor-default">Portafolio</span>
+                <span class="cursor-default hidden sm:block">Archivo</span>
+                <span class="cursor-default hidden sm:block">Ver</span>
+                <span class="cursor-default hidden sm:block">Ventana</span>
+                <span class="cursor-default hidden sm:block">Ayuda</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex gap-2 items-center cursor-pointer hover:bg-white/10 px-2 py-1 rounded-md transition-colors"
+                    onclick="event.stopPropagation(); toggleControlCenter()">
+                    <i class="fas fa-battery-full text-xs"></i>
+                    <i class="fas fa-wifi text-xs"></i>
+                    <i class="fas fa-search text-xs mr-2" onclick="event.stopPropagation(); toggleSpotlight()"></i>
+                    <span id="clock" class="font-medium w-24 text-right">--:--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Widgets Area -->
+        <div class="widgets-area">
+            <div class="widget">
+                <div class="text-3xl font-light">24°</div>
+                <div class="text-[9px] uppercase font-bold opacity-40">Cali</div>
+            </div>
+            <div class="widget">
+                <div id="widget-day" class="text-red-500 font-bold text-[10px] uppercase">Día</div>
+                <div id="widget-date" class="text-4xl font-light">--</div>
+            </div>
+        </div>
+
+        <!-- Desktop Icons (Moved to Left) -->
+        <div class="absolute top-20 left-6 flex flex-col gap-10 items-start pointer-events-auto z-0" id="desktop-icons">
+            <!-- Design -->
+            <div class="flex flex-col items-center gap-1 group cursor-pointer w-20" ondblclick="openFolder('design')">
+                <div class="w-16 h-14 rounded-lg flex items-center justify-center transition-colors">
+                    <img src="https://img.icons8.com/fluency/96/folder-invoices.png"
+                        class="w-full h-full object-contain">
+                </div>
+                <span
+                    class="text-white text-xs font-medium shadow-black/50 text-shadow text-center leading-tight bg-black/20 px-2 py-0.5 rounded-md backdrop-blur-sm">Diseño</span>
+            </div>
+
+            <!-- Programming -->
+            <div class="flex flex-col items-center gap-1 group cursor-pointer w-20"
+                ondblclick="openFolder('programming')">
+                <div class="w-16 h-14 rounded-lg flex items-center justify-center transition-colors">
+                    <img src="https://img.icons8.com/fluency/96/folder-invoices.png"
+                        class="w-full h-full object-contain">
+                </div>
+                <span
+                    class="text-white text-xs font-medium shadow-black/50 text-shadow text-center leading-tight bg-black/20 px-2 py-0.5 rounded-md backdrop-blur-sm">Código</span>
+            </div>
+
+            <!-- AI -->
+            <div class="flex flex-col items-center gap-1 group cursor-pointer w-20" ondblclick="openFolder('ai')">
+                <div class="w-16 h-14 rounded-lg flex items-center justify-center transition-colors">
+                    <img src="https://img.icons8.com/fluency/96/folder-invoices.png"
+                        class="w-full h-full object-contain">
+                </div>
+                <span
+                    class="text-white text-xs font-medium shadow-black/50 text-shadow text-center leading-tight bg-black/20 px-2 py-0.5 rounded-md backdrop-blur-sm">IA</span>
+            </div>
+        </div>
+
+        <!-- Windows Container -->
+        <div id="windows-container">
+
+            <!-- APP STORE (SKILLS) -->
+            <div id="appstore-window" class="window" style="width: 700px; height: 500px; top: 100px; left: 200px;"
+                onmousedown="focusApp('appstore')">
+                <div class="window-header" onmousedown="dragElement(this.parentElement)">
+                    <div class="traffic-lights">
+                        <div class="light light-close" onclick="closeApp('appstore')"><i class="fas fa-times"></i></div>
+                        <div class="light light-min" onclick="minimizeApp('appstore')"><i class="fas fa-minus"></i>
+                        </div>
+                        <div class="light light-max" onclick="maximizeApp('appstore')"><i class="fas fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 text-center text-xs font-bold opacity-30">Skills Center</div>
+                </div>
+                <div class="bg-white h-full p-10 overflow-auto custom-scrollbar">
+                    <h2 class="text-black text-3xl font-bold mb-8">Mis Habilidades</h2>
+                    <div class="grid grid-cols-4 gap-6 text-center">
+                        <!-- Adobe Suite -->
+                        <div class="flex flex-col items-center gap-3 p-4 hover:bg-gray-50 rounded-xl transition-colors">
+                            <div
+                                class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center text-red-600 text-3xl mb-1">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <span class="font-bold text-sm text-gray-700">Adobe Suite</span>
+                        </div>
+                        <!-- Blender -->
+                        <div class="flex flex-col items-center gap-3 p-4 hover:bg-gray-50 rounded-xl transition-colors">
+                            <div
+                                class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-500 text-3xl mb-1">
+                                <i class="fas fa-cube"></i>
+                            </div>
+                            <span class="font-bold text-sm text-gray-700">Blender 3D</span>
+                        </div>
+                        <!-- HTML -->
+                        <div class="flex flex-col items-center gap-3 p-4 hover:bg-gray-50 rounded-xl transition-colors">
+                            <div
+                                class="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600 text-3xl mb-1">
+                                <i class="fab fa-html5"></i>
+                            </div>
+                            <span class="font-bold text-sm text-gray-700">HTML5</span>
+                        </div>
+                        <!-- CSS -->
+                        <div class="flex flex-col items-center gap-3 p-4 hover:bg-gray-50 rounded-xl transition-colors">
+                            <div
+                                class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 text-3xl mb-1">
+                                <i class="fab fa-css3-alt"></i>
+                            </div>
+                            <span class="font-bold text-sm text-gray-700">CSS3</span>
+                        </div>
+                        <!-- JS -->
+                        <div class="flex flex-col items-center gap-3 p-4 hover:bg-gray-50 rounded-xl transition-colors">
+                            <div
+                                class="w-16 h-16 bg-yellow-50 rounded-2xl flex items-center justify-center text-yellow-500 text-3xl mb-1">
+                                <i class="fab fa-js"></i>
+                            </div>
+                            <span class="font-bold text-sm text-gray-700">JavaScript</span>
+                        </div>
+                        <!-- Python -->
+                        <div class="flex flex-col items-center gap-3 p-4 hover:bg-gray-50 rounded-xl transition-colors">
+                            <div
+                                class="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center text-yellow-600 text-3xl mb-1">
+                                <i class="fab fa-python"></i>
+                            </div>
+                            <span class="font-bold text-sm text-gray-700">Python</span>
+                        </div>
+                        <!-- Web Design -->
+                        <div class="flex flex-col items-center gap-3 p-4 hover:bg-gray-50 rounded-xl transition-colors">
+                            <div
+                                class="w-16 h-16 bg-pink-50 rounded-2xl flex items-center justify-center text-pink-500 text-3xl mb-1">
+                                <i class="fas fa-pencil-ruler"></i>
+                            </div>
+                            <span class="font-bold text-sm text-gray-700">Diseño Web</span>
+                        </div>
+                        <!-- Marketing -->
+                        <div class="flex flex-col items-center gap-3 p-4 hover:bg-gray-50 rounded-xl transition-colors">
+                            <div
+                                class="w-16 h-16 bg-green-50 rounded-2xl flex items-center justify-center text-green-500 text-3xl mb-1">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <span class="font-bold text-sm text-gray-700">Marketing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Music -->
+            <div id="music-window" class="window" style="width: 320px; height: 480px; top: 120px; left: 600px;"
+                onmousedown="focusApp('music')">
+                <div class="window-header" onmousedown="dragElement(this.parentElement)">
+                    <div class="traffic-lights">
+                        <div class="light light-close" onclick="closeApp('music')"><i class="fas fa-times"></i></div>
+                        <div class="light light-min" onclick="minimizeApp('music')"><i class="fas fa-minus"></i></div>
+                    </div>
+                </div>
+                <div class="music-content">
+                    <iframe style="border-radius:0 0 12px 12px"
+                        src="https://open.spotify.com/embed/playlist/0vvXsWCC9xrXsKd4FyS8kM?utm_source=generator&theme=0"
+                        width="100%" height="100%" frameBorder="0" allowfullscreen=""
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                        loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <!-- Finder -->
+            <div id="finder-window" class="window" style="width: 800px; height: 500px; top: 80px; left: 80px;"
+                onmousedown="focusApp('finder')">
+                <div class="window-header" onmousedown="dragElement(this.parentElement)">
+                    <div class="traffic-lights">
+                        <div class="light light-close" onclick="closeApp('finder')"><i class="fas fa-times"></i></div>
+                        <div class="light light-min" onclick="minimizeApp('finder')"><i class="fas fa-minus"></i></div>
+                        <div class="light light-max" onclick="maximizeApp('finder')"><i class="fas fa-expand"></i></div>
+                    </div>
+                    <div class="flex-1 text-center text-xs font-bold opacity-30">Finder</div>
+                </div>
+                <div class="flex h-full bg-white text-black">
+                    <!-- Sidebar -->
+                    <div
+                        class="w-48 bg-gray-100/80 backdrop-blur-xl border-r border-gray-200 p-4 flex flex-col gap-6 text-xs font-medium">
+                        <div>
+                            <div class="opacity-50 mb-2 px-2">Favoritos</div>
+                            <div class="flex flex-col gap-1" id="finder-sidebar-list">
+                                <!-- Dynamic Sidebar injected by js -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                    <div class="flex-1 flex flex-col">
+                        <div class="p-6 overflow-auto custom-scrollbar grid grid-cols-4 gap-6 content-start"
+                            id="finder-content-grid">
+                            <!-- Dynamic Content injected by js -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Window -->
+            <div id="preview-window" class="window" style="width: 700px; height: 800px; top: 40px; left: 300px;"
+                onmousedown="focusApp('preview')">
+                <div class="window-header" onmousedown="dragElement(this.parentElement)">
+                    <div class="traffic-lights">
+                        <div class="light light-close" onclick="closeApp('preview')"><i class="fas fa-times"></i></div>
+                        <div class="light light-min" onclick="minimizeApp('preview')"><i class="fas fa-minus"></i></div>
+                        <div class="light light-max" onclick="maximizeApp('preview')"><i class="fas fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 text-center text-xs font-bold opacity-30">Vista Previa</div>
+                </div>
+                <div id="preview-content" class="h-full bg-white text-black flex items-center justify-center">
+                    <!-- Content injected by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mail -->
+    <div id="mail-window" class="window" style="width: 850px; height: 600px; top: 50px; left: 120px;"
+        onmousedown="focusApp('mail')">
+        <div class="window-header" onmousedown="dragElement(this.parentElement)">
+            <div class="traffic-lights">
+                <div class="light light-close" onclick="closeApp('mail')"><i class="fas fa-times"></i></div>
+                <div class="light light-min" onclick="minimizeApp('mail')"><i class="fas fa-minus"></i></div>
+                <div class="light light-max" onclick="maximizeApp('mail')"><i class="fas fa-expand"></i></div>
+            </div>
+            <div class="flex-1 text-center text-xs font-bold opacity-30">Mail</div>
+        </div>
+        <div class="flex h-full bg-white text-black">
+            <div class="w-64 border-r border-gray-200 p-3">
+                <div class="p-3 bg-blue-50 border-b border-gray-100 cursor-pointer">
+                    <div class="font-bold text-sm">Recruiter</div>
+                    <div class="text-xs text-gray-500">Job Offer...</div>
+                </div>
+            </div>
+            <div class="flex-1 p-6">
+                <h2 class="text-xl font-bold mb-4">Job Proposal</h2>
+                <textarea id="mail-reply-input" class="w-full border rounded p-2 h-24"
+                    placeholder="Reply..."></textarea>
+                <button onclick="sendMail()"
+                    class="bg-blue-500 text-white px-4 py-2 rounded mt-2 text-sm">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Safari -->
+    <div id="safari-window" class="window" style="width: 900px; height: 600px; top: 60px; left: 100px;"
+        onmousedown="focusApp('safari')">
+        <div class="window-header" onmousedown="dragElement(this.parentElement)">
+            <div class="traffic-lights">
+                <div class="light light-close" onclick="closeApp('safari')"><i class="fas fa-times"></i></div>
+                <div class="light light-min" onclick="minimizeApp('safari')"><i class="fas fa-minus"></i></div>
+                <div class="light light-max" onclick="maximizeApp('safari')"><i class="fas fa-expand"></i></div>
+            </div>
+            <div class="bg-white/10 rounded-lg h-6 flex items-center px-4 text-[10px] text-white/50 ml-4 flex-1">
+                kevinos.dev</div>
+        </div>
+        <div class="safari-content overflow-auto custom-scrollbar bg-white h-full">
+            <!-- Dynamic Content -->
+        </div>
+    </div>
+
+    <!-- Terminal -->
+    <div id="terminal-window" class="window" style="width: 650px; height: 450px; top: 120px; left: 250px;"
+        onmousedown="focusApp('terminal')">
+        <div class="window-header" onmousedown="dragElement(this.parentElement)">
+            <div class="traffic-lights">
+                <div class="light light-close" onclick="closeApp('terminal')"><i class="fas fa-times"></i></div>
+                <div class="light light-min" onclick="minimizeApp('terminal')"><i class="fas fa-minus"></i>
+                </div>
+                <div class="light light-max" onclick="maximizeApp('terminal')"><i class="fas fa-expand"></i>
+                </div>
+            </div>
+        </div>
+        <div class="terminal-content custom-scrollbar" id="terminal-output">
+            <div id="terminal-log"></div>
+            <div id="terminal-input-container" class="flex gap-2">
+                <span class="text-blue-400 font-bold">kevin@mac ~ %</span>
+                <input type="text" id="terminal-input"
+                    class="bg-transparent border-none outline-none text-[#0f0] flex-1" autofocus autocomplete="off">
+            </div>
+        </div>
+    </div>
+
+    <!-- AI -->
+    <div id="ai-window" class="window" style="width: 400px; height: 500px; top: 100px; left: 450px;"
+        onmousedown="focusApp('ai')">
+        <div class="window-header" onmousedown="dragElement(this.parentElement)">
+            <div class="traffic-lights">
+                <div class="light light-close" onclick="closeApp('ai')"><i class="fas fa-times"></i></div>
+            </div>
+        </div>
+        <div class="flex flex-col h-full bg-white text-black">
+            <div id="ai-messages" class="flex-1 p-4 flex flex-col overflow-auto custom-scrollbar pb-4 gap-2">
+            </div>
+            <div class="p-3 border-t bg-gray-50 flex gap-3">
+                <input id="ai-input" type="text" placeholder="Pregunta..."
+                    class="flex-1 bg-white border rounded-full px-4 py-2 text-sm outline-none">
+                <button onclick="sendChatMessage()" class="w-8 h-8 bg-blue-500 rounded-full text-white"><i
+                        class="fas fa-arrow-up"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notes -->
+    <div id="notes-window" class="window" style="width: 300px; height: 350px; top: 150px; left: 500px;"
+        onmousedown="focusApp('notes')">
+        <div class="window-header" onmousedown="dragElement(this.parentElement)" style="background: #fdf5a6;">
+            <div class="traffic-lights">
+                <div class="light light-close" onclick="closeApp('notes')"><i class="fas fa-times"></i></div>
+                <div class="light light-min" onclick="minimizeApp('notes')"><i class="fas fa-minus"></i></div>
+            </div>
+        </div>
+        <div class="notes-content">
+            <textarea id="notes-area" placeholder="Escribe una nota rapida..."></textarea>
+        </div>
+    </div>
+
+    <!-- About -->
+    <div id="about-window" class="window" style="width: 420px; height: 320px; top: 150px; left: 350px;"
+        onmousedown="focusApp('about')">
+        <div class="window-header" onmousedown="dragElement(this.parentElement)">
+            <div class="traffic-lights">
+                <div class="light light-close" onclick="closeApp('about')"><i class="fas fa-times"></i></div>
+            </div>
+        </div>
+        <div class="p-8 text-center flex flex-col items-center justify-center">
+            <div
+                class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4 text-white text-3xl font-black flex items-center justify-center shadow-lg">
+                K</div>
+            <h2 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+                KevinOS</h2>
+            <p class="opacity-60 text-xs font-mono mb-6">v4.0 Pro Edition</p>
+
+            <p class="text-sm text-gray-400 mb-2">Un sistema operativo en la web.</p>
+            <p class="text-[10px] text-gray-500">Built with ❤️ by Kevin & Antigravity AI</p>
+        </div>
+    </div>
+
+    <!-- Info Popups (Reusing About Window or similar generic) -->
+    <div id="info-window" class="window" style="width: 400px; height: 350px; top: 200px; left: 400px;"
+        onmousedown="focusApp('info')">
+        <div class="window-header" onmousedown="dragElement(this.parentElement)">
+            <div class="traffic-lights">
+                <div class="light light-close" onclick="closeApp('info')"><i class="fas fa-times"></i></div>
+            </div>
+            <div class="flex-1 text-center text-xs font-bold opacity-30">Información</div>
+        </div>
+        <div class="p-8 text-center flex flex-col items-center bg-white h-full text-gray-800">
+            <img id="info-icon" src="" class="w-24 h-24 mb-6 object-contain">
+            <h2 id="info-title" class="text-2xl font-bold mb-2">Title</h2>
+            <p id="info-desc" class="text-sm opacity-70">Description goes here.</p>
+        </div>
+    </div>
+
+    <!-- Pong -->
+    <div id="pong-window" class="window" style="width: 600px; height: 450px; top: 150px; left: 300px;"
+        onmousedown="focusApp('pong')">
+        <div class="window-header" onmousedown="dragElement(this.parentElement)">
+            <div class="traffic-lights">
+                <div class="light light-close" onclick="closePong()"><i class="fas fa-times"></i></div>
+                <div class="light light-min" onclick="minimizeApp('pong')"><i class="fas fa-minus"></i></div>
+            </div>
+            <div class="flex-1 text-center text-xs font-bold opacity-30">Pong</div>
+        </div>
+        <div class="h-full bg-black flex items-center justify-center rounded-b-xl overflow-hidden">
+            <canvas id="pong-canvas" width="600" height="410"></canvas>
+        </div>
+    </div>
+
+    </div>
+    <!-- End Windows Container -->
+
+    <!-- Dock -->
+    <div class="dock-container">
+        <!-- System -->
+        <div class="dock-item" onclick="toggleLaunchpad()">
+            <div class="dock-tooltip">Launchpad</div>
+            <img src="https://img.icons8.com/fluency/96/rocket.png" class="dock-icon">
+        </div>
+        <div class="w-[0.5px] h-10 bg-white/10 mx-1"></div>
+
+        <div class="dock-item" onclick="openApp('finder')">
+            <div class="dock-tooltip">Finder</div>
+            <div class="dock-icon bg-blue-500 text-white"><i class="fas fa-face-smile text-2xl"></i></div>
+            <div class="indicator" id="ind-finder"></div>
+        </div>
+        <div class="dock-item" onclick="openApp('safari')">
+            <div class="dock-tooltip">Safari</div>
+            <div class="dock-icon bg-blue-400 text-white"><i class="fas fa-compass text-2xl"></i></div>
+            <div class="indicator" id="ind-safari"></div>
+        </div>
+        <div class="dock-item" onclick="openApp('terminal')">
+            <div class="dock-tooltip">Terminal</div>
+            <div class="dock-icon bg-gray-800 text-white"><i class="fas fa-terminal text-2xl"></i></div>
+            <div class="indicator" id="ind-terminal"></div>
+        </div>
+        <div class="dock-item" onclick="openApp('mail')">
+            <div class="dock-tooltip">Mail</div>
+            <div class="dock-icon bg-blue-600 text-white"><i class="fas fa-envelope text-2xl"></i></div>
+            <div class="indicator" id="ind-mail"></div>
+        </div>
+
+        <div class="w-[0.5px] h-10 bg-white/10 mx-1"></div>
+
+        <div class="dock-item" onclick="openCalculator()">
+            <div class="dock-tooltip">Calculadora</div>
+            <div class="dock-icon bg-gray-700 text-white"><i class="fas fa-calculator text-lg"></i></div>
+            <div class="indicator" id="ind-calculator"></div>
+        </div>
+
+        <div class="dock-item" onclick="openSnake()">
+            <div class="dock-tooltip">Snake</div>
+            <div class="dock-icon bg-green-500 text-white"><i class="fas fa-gamepad text-2xl"></i></div>
+            <div class="indicator" id="ind-snake"></div>
+        </div>
+        <div class="dock-item" onclick="openPong()">
+            <div class="dock-tooltip">Pong</div>
+            <div class="dock-icon bg-white text-black border border-gray-400"><i
+                    class="fas fa-table-tennis text-2xl"></i></div>
+            <div class="indicator" id="ind-pong"></div>
+        </div>
+        <div class="dock-item" onclick="openApp('music')">
+            <div class="dock-tooltip">Música</div>
+            <div class="dock-icon bg-red-500 text-white"><i class="fab fa-spotify text-2xl"></i></div>
+            <div class="indicator" id="ind-music"></div>
+        </div>
+        <div class="dock-item" onclick="openApp('notes')">
+            <div class="dock-tooltip">Notas</div>
+            <div class="dock-icon bg-yellow-400 text-white"><i class="fas fa-note-sticky text-2xl"></i></div>
+            <div class="indicator" id="ind-notes"></div>
+        </div>
+    </div>
+
+    </div>
+
+</body>
+
+<!-- Core System -->
+<script src="js/core/windowManager.js"></script>
+<script src="js/core/notifications.js"></script>
+<script src="js/core/controlCenter.js"></script>
+<script src="js/core/desktop.js"></script>
+<script src="js/core/system.js"></script>
+
+<!-- Apps -->
+<script src="js/apps/terminal.js"></script>
+<script src="js/apps/safari.js"></script>
+<script src="js/apps/finder.js"></script>
+<script src="js/apps/mail.js"></script>
+<script src="js/apps/notes.js"></script>
+<script src="js/apps/ai.js"></script>
+<script src="js/apps/calculator.js"></script>
+
+<script src="js/apps/snake.js"></script>
+<script src="js/apps/pong.js"></script>
+<script src="js/apps/preview.js"></script>
+
+<!-- Main Init -->
+<script src="js/main.js"></script>
+
+</html>
