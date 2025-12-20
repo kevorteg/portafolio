@@ -670,28 +670,145 @@
 
     <!-- Mobile Profile (Shown only on small screens) -->
     <div id="mobile-profile"
-        class="hidden fixed inset-0 z-[60000] bg-black text-white flex-col items-center justify-center p-8 text-center">
+        class="hidden fixed inset-0 z-[60000] bg-[#0c0c0e] text-white flex-col overflow-y-auto overflow-x-hidden">
+
+        <!-- Header / Profile Card -->
         <div
-            class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 mb-6 flex items-center justify-center text-5xl shadow-2xl">
-            👨‍💻
-        </div>
-        <h1 class="text-4xl font-bold mb-2">Kevin Ortega</h1>
-        <p class="text-gray-400 mb-8 text-lg">Full Stack Developer Creative</p>
+            class="relative w-full p-6 pb-8 bg-[#151517] rounded-b-[2rem] shadow-2xl border-b border-white/5 flex flex-col items-center text-center">
+            <!-- Background Glow -->
+            <div
+                class="absolute top-[-50%] left-[-20%] w-[140%] h-[100%] bg-blue-600/20 blur-[100px] pointer-events-none rounded-full">
+            </div>
 
-        <div class="flex flex-col gap-4 w-full max-w-sm">
-            <a href="https://github.com/kevorteg" target="_blank"
-                class="bg-white/10 border border-white/20 p-4 rounded-xl flex items-center justify-center gap-3 hover:bg-white/20 transition">
-                <i class="fab fa-github text-xl"></i> Ver GitHub
-            </a>
-            <a href="mailto:contact@kevinos.dev"
-                class="bg-white/10 border border-white/20 p-4 rounded-xl flex items-center justify-center gap-3 hover:bg-white/20 transition">
-                <i class="fas fa-envelope text-xl"></i> Contactar
-            </a>
+            <div
+                class="relative z-10 w-24 h-24 rounded-full p-[2px] bg-gradient-to-tr from-blue-500 to-purple-500 mb-4 shadow-lg shadow-purple-500/20">
+                <div class="w-full h-full rounded-full bg-[#151517] flex items-center justify-center overflow-hidden">
+                    <img src="image/perfil/perfil.jpg" alt="Profile" class="w-full h-full object-cover">
+                </div>
+            </div>
+
+            <h1
+                class="relative z-10 text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 mb-1">
+                Kevin Ortega</h1>
+            <p class="relative z-10 text-gray-400 text-sm font-medium tracking-wide">Full Stack Developer Creative</p>
         </div>
 
-        <p class="mt-12 text-xs text-gray-600">
-            Para la experiencia completa de KevinOS v4.0,<br>por favor visita este sitio desde una PC. 🖥️
-        </p>
+        <div class="flex-1 w-full px-5 py-6 flex flex-col gap-6 max-w-md mx-auto">
+
+            <!-- Skills Section -->
+            <div class="bg-[#151517] border border-white/5 rounded-2xl p-5 shadow-lg">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                    <i class="fas fa-code text-blue-500"></i> Skills
+                </h2>
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fab fa-js text-yellow-400 text-2xl"></i>
+                        <span class="text-[10px] text-gray-400">JS</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fab fa-react text-cyan-400 text-2xl"></i>
+                        <span class="text-[10px] text-gray-400">React</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fab fa-node text-green-500 text-2xl"></i>
+                        <span class="text-[10px] text-gray-400">Node</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fab fa-python text-blue-500 text-2xl"></i>
+                        <span class="text-[10px] text-gray-400">Python</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fab fa-html5 text-orange-500 text-2xl"></i>
+                        <span class="text-[10px] text-gray-400">HTML</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fab fa-css3-alt text-blue-500 text-2xl"></i>
+                        <span class="text-[10px] text-gray-400">CSS</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fab fa-git-alt text-red-500 text-2xl"></i>
+                        <span class="text-[10px] text-gray-400">Git</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fas fa-database text-green-400 text-2xl"></i>
+                        <span class="text-[10px] text-gray-400">Mongo</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Section -->
+            <div class="bg-[#151517] border border-white/5 rounded-2xl p-5 shadow-lg">
+                <h2 class="text-lg font-bold mb-4 flex items-center justify-between">
+                    <span><i class="fas fa-rocket text-purple-500 mr-2"></i> Proyectos</span>
+                    <span class="text-xs text-gray-500 font-normal">Destacados</span>
+                </h2>
+
+                <div class="grid grid-cols-1 gap-4">
+                    <!-- Project 1 -->
+                    <div class="bg-black/20 rounded-xl p-3 border border-white/5 flex gap-4 items-center">
+                        <div class="w-16 h-16 rounded-lg bg-blue-900/20 flex items-center justify-center text-2xl">💻
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-sm">KevinOS Desktop</h3>
+                            <p class="text-xs text-gray-500 mb-2">Web OS simulation</p>
+                        </div>
+                        <a href="#"
+                            class="px-3 py-1.5 bg-blue-600/20 text-blue-400 text-xs rounded-lg border border-blue-600/30">Ver</a>
+                    </div>
+                    <!-- Project 2 -->
+                    <div class="bg-black/20 rounded-xl p-3 border border-white/5 flex gap-4 items-center">
+                        <div class="w-16 h-16 rounded-lg bg-green-900/20 flex items-center justify-center text-2xl">🐍
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-sm">Snake Game</h3>
+                            <p class="text-xs text-gray-500 mb-2">Classic arcade</p>
+                        </div>
+                        <a href="#"
+                            class="px-3 py-1.5 bg-green-600/20 text-green-400 text-xs rounded-lg border border-green-600/30">Jugar</a>
+                    </div>
+                    <!-- Project 3 -->
+                    <div class="bg-black/20 rounded-xl p-3 border border-white/5 flex gap-4 items-center">
+                        <div class="w-16 h-16 rounded-lg bg-white/10 flex items-center justify-center text-2xl">🏓</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-sm">Pong AI</h3>
+                            <p class="text-xs text-gray-500 mb-2">Beat the machine</p>
+                        </div>
+                        <a href="#"
+                            class="px-3 py-1.5 bg-white/10 text-gray-300 text-xs rounded-lg border border-white/20">Jugar</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col gap-3 mt-2">
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="https://github.com/kevorteg" target="_blank"
+                        class="bg-gradient-to-r from-blue-600 to-blue-500 p-3 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20 active:scale-95 transition">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="mailto:contact@kevinos.dev"
+                        class="bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-purple-900/20 active:scale-95 transition">
+                        <i class="fas fa-envelope"></i> Contactar
+                    </a>
+                </div>
+                <button
+                    class="w-full bg-[#1e1e21] border border-white/10 text-gray-300 p-3 rounded-xl text-sm font-medium active:scale-95 transition">
+                    Descargar CV
+                </button>
+            </div>
+
+            <!-- Footer -->
+            <div class="flex justify-center gap-6 mt-4 opacity-50">
+                <i class="fab fa-linkedin text-xl"></i>
+                <i class="fab fa-twitter text-xl"></i>
+                <i class="fas fa-globe text-xl"></i>
+            </div>
+
+            <p class="text-center text-[10px] text-gray-600 mt-2 pb-8">
+                KevinOS v4.0 Mobile Edition &copy; 2025
+            </p>
+
+        </div>
     </div>
 
 </body>
