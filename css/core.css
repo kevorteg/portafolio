@@ -484,3 +484,43 @@ html {
 .notification-toast.show {
     transform: translateX(0);
 }
+
+/* Mobile Responsive Logic */
+@media (min-width: 768px) {
+    #mobile-profile {
+        display: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* Hide specific elements explicitly just in case */
+    .desktop,
+    .dock-container,
+    #launchpad,
+    #spotlight,
+    #control-center,
+    #boot-screen,
+    #lock-screen,
+    .window,
+    #brightness-overlay,
+    #matrix-canvas {
+        display: none !important;
+    }
+
+    /* Target specific IDs that might override */
+    #desktop {
+        display: none !important;
+    }
+
+    /* Show Mobile Profile */
+    #mobile-profile {
+        display: flex !important;
+    }
+
+    /* Reset body overflow for mobile scrolling if needed */
+    body,
+    html {
+        overflow: auto;
+    }
+}
