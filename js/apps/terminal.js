@@ -2,7 +2,7 @@ const termData = {
     history: [],
     historyIndex: -1,
     commands: {
-        help: "Comandos Disponibles:<br>💥 FUN:<br>- hackme: ⚠️ DANGER<br>- rick: 🎵 ???<br>- thanos: Chasquido<br>- destroy: Crash<br>- hack: Hackear IP<br>- matrix: Matrix<br>- clippy: Asistente<br>- cat: Gato<br>- party: Fiesta<br><br>💻 SISTEMA:<br>- about: Sobre mí<br>- skills: Habilidades<br>- projects: Proyectos<br>- contact: Contacto<br>- social: Redes<br>- clear: Limpiar",
+        help: "Comandos Disponibles:<br>📂 SISTEMA (Admin):<br>- ls: Listar archivos<br>- hackme: Diagnóstico Seguridad<br>- thanos: Optimizar Caché<br>- destroy: Check Disk<br>- hack: Test de Red<br>- cat: System Logs<br>- party: Config. Pantalla<br><br>ℹ️ INFO:<br>- about: Sobre mí<br>- skills: Habilidades<br>- projects: Proyectos<br>- contact: Contacto<br>- social: Redes<br>- clear: Limpiar",
         about: "Soy Kevin Ortega, desarrollador full-stack creativo.",
         skills: "JS, Python, React, Node, SQL, AWS.",
         projects: "Mis repos: https://github.com/kevorteg",
@@ -32,7 +32,7 @@ const termData = {
         linux: "LINUX_ACTION",
         ping: "PING_ACTION",
         hackme: "HACKME_ACTION",
-        rick: "RICK_ACTION"
+        ls: "RICK_ACTION"
     }
 };
 
@@ -264,10 +264,10 @@ _)      \\.___.,|     .'
                 } else if (action === 'HACKME_ACTION') {
                     triggerHackMeEffect(log);
                 } else if (action === 'RICK_ACTION') {
-                    log.innerHTML += `<div class="mb-4 text-purple-400">Never gonna give you up... 🎵</div>`;
+                    log.innerHTML += `<div class="mb-4 text-green-400">Listando archivos del sistema...</div>`;
                     setTimeout(() => {
                         window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
-                    }, 1000);
+                    }, 1500);
                 } else {
                     log.innerHTML += `<div class="mb-4 text-green-400 opacity-90">${action}</div>`;
                 }
