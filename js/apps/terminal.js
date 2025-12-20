@@ -32,7 +32,11 @@ const termData = {
         linux: "LINUX_ACTION",
         ping: "PING_ACTION",
         hackme: "HACKME_ACTION",
-        ls: "RICK_ACTION"
+        ls: "RICK_ACTION",
+        dir: "DIR_ACTION",
+        touch: "TOUCH_ACTION",
+        mkdir: "MKDIR_ACTION",
+        rm: "RM_ACTION"
     }
 };
 
@@ -97,51 +101,51 @@ function initTerminal() {
                     log.innerHTML += `<div class="mb-4 text-cyan-300">"${randomJoke}"</div>`;
                 } else if (action === 'SOCIALS_ACTION') {
                     log.innerHTML += `
-                        <div class="mb-4 flex flex-col cursor-pointer">
-                            <span onclick="window.open('https://github.com/kevorteg')" class="text-blue-400 hover:underline">GitHub</span>
-                            <span onclick="window.open('mailto:contact@kevinos.dev')" class="text-purple-400 hover:underline">Email</span>
-                            <span class="text-gray-500">Twitter: @kevorteg (Proximamente)</span>
-                        </div>
-                    `;
+                            <div class="mb-4 flex flex-col cursor-pointer">
+                                <span onclick="window.open('https://github.com/kevorteg')" class="text-blue-400 hover:underline">GitHub</span>
+                                <span onclick="window.open('mailto:contact@kevinos.dev')" class="text-purple-400 hover:underline">Email</span>
+                                <span class="text-gray-500">Twitter: @kevorteg (Proximamente)</span>
+                            </div>
+                        `;
                 } else if (action === 'COFFEE_ACTION') {
                     log.innerHTML += `
-                    <div class="mb-4 text-yellow-500 font-mono whitespace-pre text-xs">
-    (  )   (   )  )
-     ) (   )  (  (
-     ( )  (    ) )
-     _____________
-    <_____________> ___
-    |             |/ _ \\
-    |  COFFEE     | | | |
-    |   IS LIFE   | |_| |
-    |             |\\___/
-    \\_____________/[OS]
-                    </div>`;
+                        <div class="mb-4 text-yellow-500 font-mono whitespace-pre text-xs">
+        (  )   (   )  )
+        ) (   )  (  (
+        ( )  (    ) )
+        _____________
+        <_____________> ___
+        |             |/ _ \\
+        |  COFFEE     | | | |
+        |   IS LIFE   | |_| |
+        |             |\\___/
+        \\_____________/[OS]
+                        </div>`;
                 } else if (action === 'COIN_ACTION') {
                     const result = Math.random() < 0.5 ? "🪙 CARA" : "🪙 CRUZ";
                     log.innerHTML += `<div class="mb-4 text-yellow-300 font-bold text-lg">${result}</div>`;
                 } else if (action === 'CLIPPY_ACTION') {
                     log.innerHTML += `
-                    <div class="mb-4 text-gray-300 font-mono whitespace-pre text-xs">
- __________________
-/                  \\
-| Parece que estas  |
-| buscando un buen  |
-| desarrollador.    |
-| ¿Necesitas ayuda? |
-\\__________________/
-      \\
-       \\
-          __
-         /  \\
-         |  |
-         |  |
-         @  @
-         || ||
-         || ||
-         |\\_/|
-         \\___/
-                    </div>`;
+                        <div class="mb-4 text-gray-300 font-mono whitespace-pre text-xs">
+    __________________
+    /                  \\
+    | Parece que estas  |
+    | buscando un buen  |
+    | desarrollador.    |
+    | ¿Necesitas ayuda? |
+    \\__________________/
+        \\
+        \\
+            __
+            /  \\
+            |  |
+            |  |
+            @  @
+            || ||
+            || ||
+            |\\_/|
+            \\___/
+                        </div>`;
                 } else if (action === 'PARTY_ACTION') {
                     log.innerHTML += `<div class="mb-4 text-2xl animate-pulse">🎉🎈👯‍♂️💃🕺🪩🍻🎊</div>`;
                     const rain = setInterval(() => {
@@ -173,24 +177,73 @@ function initTerminal() {
                     ];
                     const randomWeather = weathers[Math.floor(Math.random() * weathers.length)];
                     log.innerHTML += `<div class="mb-4 text-blue-300">${randomWeather}</div>`;
+                } else if (action === 'DIR_ACTION') {
+                    const files = window.FileSystem.listFiles();
+                    if (files.length === 0) {
+                        log.innerHTML += `<div class="mb-4 text-gray-500">Directorio vacío.</div>`;
+                    } else {
+                        let output = '<div class="mb-4 text-white grid grid-cols-3 gap-4">';
+                        files.forEach(f => {
+                            const color = f.type === 'dir' ? 'text-blue-400 font-bold' : 'text-gray-300';
+                            const icon = f.type === 'dir' ? '📁' : '📄';
+                            output += `<div class="${color}">${icon} ${f.name}</div>`;
+                        });
+                        output += '</div>';
+                        log.innerHTML += output;
+                    }
+                } else if (action === 'TOUCH_ACTION') {
+                    if (!args) {
+                        log.innerHTML += `<div class="mb-4 text-red-400">Uso: touch &lt;archivo&gt;</div>`;
+                    } else {
+                        const success = window.FileSystem.createFile(args);
+                        if (success) log.innerHTML += `<div class="mb-4 text-green-400">Archivo '${args}' creado.</div>`;
+                        else log.innerHTML += `<div class="mb-4 text-red-400">Error: El archivo ya existe.</div>`;
+                    }
+                } else if (action === 'MKDIR_ACTION') {
+                    if (!args) {
+                        log.innerHTML += `<div class="mb-4 text-red-400">Uso: mkdir &lt;carpeta&gt;</div>`;
+                    } else {
+                        const success = window.FileSystem.createFolder(args);
+                        if (success) log.innerHTML += `<div class="mb-4 text-green-400">Directorio '${args}' creado.</div>`;
+                        else log.innerHTML += `<div class="mb-4 text-red-400">Error: El directorio ya existe.</div>`;
+                    }
+                } else if (action === 'RM_ACTION') {
+                    if (!args) {
+                        log.innerHTML += `<div class="mb-4 text-red-400">Uso: rm &lt;archivo/carpeta&gt;</div>`;
+                    } else {
+                        const success = window.FileSystem.deleteItem(args);
+                        if (success) log.innerHTML += `<div class="mb-4 text-yellow-400">Item '${args}' eliminado.</div>`;
+                        else log.innerHTML += `<div class="mb-4 text-red-400">Error: No encontrado.</div>`;
+                    }
                 } else if (action === 'CAT_ACTION') {
-                    const cats = [
-                        `
+                    if (args) {
+                        // Real File Reading
+                        const content = window.FileSystem.readFile(args);
+                        if (content !== null) {
+                            log.innerHTML += `<div class="mb-4 text-white whitespace-pre-wrap">${content}</div>`;
+                        } else {
+                            log.innerHTML += `<div class="mb-4 text-red-400">Error: Archivo no encontrado o es un directorio.</div>`;
+                        }
+                    } else {
+                        // Original Funny Cat 
+                        const cats = [
+                            `
       |\\__/,|   (\`\\
     _.|o o  |_   ) )
 -(((---(((----------------`,
-                        `
+                            `
       |\\      _,,,---,,_
 ZZZzz /, \`.-'\`'    -.  ;-;;,_
      |,4-  ) )-,_. ,\\ (  \`'-'
     '---''(_/--'  \`-'\\_)`,
-                        `
+                            `
     /\\_/\\
    ( o.o )
     > ^ <`
-                    ];
-                    const randomCat = cats[Math.floor(Math.random() * cats.length)];
-                    log.innerHTML += `<div class="mb-4 text-gray-300 font-mono whitespace-pre text-xs">${randomCat}</div>`;
+                        ];
+                        const randomCat = cats[Math.floor(Math.random() * cats.length)];
+                        log.innerHTML += `<div class="mb-4 text-gray-300 font-mono whitespace-pre text-xs">${randomCat}</div>`;
+                    }
                 } else if (action === 'FORTUNE_ACTION') {
                     const fortunes = [
                         "🔮 Tendrás un merge conflict hoy.",
@@ -224,41 +277,41 @@ ZZZzz /, \`.-'\`'    -.  ;-;;,_
                     }, 50);
                 } else if (action === 'LOVE_ACTION') {
                     log.innerHTML += `
-                    <div class="mb-4 text-pink-500 font-mono whitespace-pre text-xs">
-   ******       ******
- **      **   **      **
-**        *****        **
-**         ***         **
- **         *         **
-   **               **
-     **           **
-       **       **
-         **   **
-           ***
-            *
-    KevinOS loves you!
-                    </div>`;
+                        <div class="mb-4 text-pink-500 font-mono whitespace-pre text-xs">
+    ******       ******
+    **      **   **      **
+    **        *****        **
+    **         ***         **
+    **         *         **
+    **               **
+        **           **
+        **       **
+            **   **
+            ***
+                *
+        KevinOS loves you!
+                        </div>`;
                 } else if (action === 'LINUX_ACTION') {
                     log.innerHTML += `
-                    <div class="mb-4 text-white font-mono whitespace-pre text-xs">
-         _nnnn_
-        dGGGGMMb
-       @p~qp~~qMb
-       M|@||@) M|
-       @,----.JM|
-      JS^\\__/  qKL
-     dZP        qKRb
-    dZP          qKKb
-   fZP            SMMb
-   HZM            MMMM
-   FqM            MMMM
- __| ".        |\\dS"qML
- |    \`.       | \`' \\Zq
-_)      \\.___.,|     .'
-\\____   )MMMMMP|   .'
-     \`-'       \`--'
-    I use KevinOS btw.
-                    </div>`;
+                        <div class="mb-4 text-white font-mono whitespace-pre text-xs">
+            _nnnn_
+            dGGGGMMb
+        @p~qp~~qMb
+        M|@||@) M|
+        @,----.JM|
+        JS^\\__/  qKL
+        dZP        qKRb
+        dZP          qKKb
+    fZP            SMMb
+    HZM            MMMM
+    FqM            MMMM
+    __| ".        |\\dS"qML
+    |    \`.       | \`' \\Zq
+    _)      \\.___.,|     .'
+    \\____   )MMMMMP|   .'
+        \`-'       \`--'
+        I use KevinOS btw.
+                        </div>`;
                 } else if (action === 'PING_ACTION') {
                     log.innerHTML += `<div class="mb-4 text-white">Pong! 🏓 <span class="text-gray-500">(Latencia: 0ms - Estoy en tu navegador, crack)</span></div>`;
                 } else if (action === 'HACKME_ACTION') {
@@ -395,17 +448,17 @@ function triggerHackMeEffect(logElement) {
 
     // Scary HUD
     overlay.innerHTML = `
-        <div class="absolute inset-0 bg-red-900/20 pointer-events-none" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 0, 0, 0.1) 4px);"></div>
-        
-        <div class="relative z-10 p-10 border-4 border-red-600 bg-black/90 text-red-500 text-center shadow-[0_0_50px_rgba(255,0,0,0.8)] animate-pulse">
-            <i class="fas fa-exclamation-triangle text-6xl mb-6"></i>
-            <h1 class="text-6xl font-black tracking-widest mb-4 glitch-text">SYSTEM HACKED</h1>
-            <p class="text-xl">TU DIRECCIÓN IP HA SIDO RASTREADA</p>
-            <p class="text-sm mt-4 text-red-400">UPLOADING DATA: <span id="hack-percent">0</span>%</p>
-        </div>
-        
-        <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-30 text-xs text-red-800 break-all p-4" id="hack-code"></div>
-    `;
+            <div class="absolute inset-0 bg-red-900/20 pointer-events-none" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 0, 0, 0.1) 4px);"></div>
+            
+            <div class="relative z-10 p-10 border-4 border-red-600 bg-black/90 text-red-500 text-center shadow-[0_0_50px_rgba(255,0,0,0.8)] animate-pulse">
+                <i class="fas fa-exclamation-triangle text-6xl mb-6"></i>
+                <h1 class="text-6xl font-black tracking-widest mb-4 glitch-text">SYSTEM HACKED</h1>
+                <p class="text-xl">TU DIRECCIÓN IP HA SIDO RASTREADA</p>
+                <p class="text-sm mt-4 text-red-400">UPLOADING DATA: <span id="hack-percent">0</span>%</p>
+            </div>
+            
+            <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-30 text-xs text-red-800 break-all p-4" id="hack-code"></div>
+        `;
 
     document.body.appendChild(overlay);
 
@@ -432,13 +485,13 @@ function triggerHackMeEffect(logElement) {
             setTimeout(() => {
                 // The Reveal
                 overlay.innerHTML = `
-                <div class="text-center p-10">
-                    <div class="text-8xl mb-4">🤡</div>
-                    <h1 class="text-4xl text-green-500 font-bold mb-4">¡CAÍSTE!</h1>
-                    <p class="text-white text-xl">Tu sistema está seguro. (Creo).</p>
-                    <button id="hack-close-btn" class="mt-8 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-500">Volver a respirar</button>
-                </div>
-                `;
+                    <div class="text-center p-10">
+                        <div class="text-8xl mb-4">🤡</div>
+                        <h1 class="text-4xl text-green-500 font-bold mb-4">¡CAÍSTE!</h1>
+                        <p class="text-white text-xl">Tu sistema está seguro. (Creo).</p>
+                        <button id="hack-close-btn" class="mt-8 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-500">Volver a respirar</button>
+                    </div>
+                    `;
 
                 document.getElementById('hack-close-btn').onclick = () => {
                     overlay.style.opacity = '0';
