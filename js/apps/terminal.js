@@ -2,7 +2,7 @@ const termData = {
     history: [],
     historyIndex: -1,
     commands: {
-        help: "Comandos Disponibles:<br>- about: Sobre mí<br>- skills: Habilidades<br>- projects: Mis Proyectos<br>- contact: Contacto<br>- matrix: ???<br>- hack: Simular hackeo<br>- thanos: Borrar sistema<br>- joke: Contar chiste<br>- reboot: Reiniciar<br>- clear: Limpiar terminal",
+        help: "Comandos Disponibles:<br>💥 FUN:<br>- hackme: ⚠️ DANGER<br>- rick: 🎵 ???<br>- thanos: Chasquido<br>- destroy: Crash<br>- hack: Hackear IP<br>- matrix: Matrix<br>- clippy: Asistente<br>- cat: Gato<br>- party: Fiesta<br><br>💻 SISTEMA:<br>- about: Sobre mí<br>- skills: Habilidades<br>- projects: Proyectos<br>- contact: Contacto<br>- social: Redes<br>- clear: Limpiar",
         about: "Soy Kevin Ortega, desarrollador full-stack creativo.",
         skills: "JS, Python, React, Node, SQL, AWS.",
         projects: "Mis repos: https://github.com/kevorteg",
@@ -31,7 +31,8 @@ const termData = {
         love: "LOVE_ACTION",
         linux: "LINUX_ACTION",
         ping: "PING_ACTION",
-        hackme: "HACKME_ACTION"
+        hackme: "HACKME_ACTION",
+        rick: "RICK_ACTION"
     }
 };
 
@@ -262,11 +263,17 @@ _)      \\.___.,|     .'
                     log.innerHTML += `<div class="mb-4 text-white">Pong! 🏓 <span class="text-gray-500">(Latencia: 0ms - Estoy en tu navegador, crack)</span></div>`;
                 } else if (action === 'HACKME_ACTION') {
                     triggerHackMeEffect(log);
+                } else if (action === 'RICK_ACTION') {
+                    log.innerHTML += `<div class="mb-4 text-purple-400">Never gonna give you up... 🎵</div>`;
+                    setTimeout(() => {
+                        window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
+                    }, 1000);
                 } else {
                     log.innerHTML += `<div class="mb-4 text-green-400 opacity-90">${action}</div>`;
                 }
             } else {
-                log.innerHTML += `<div class="mb-4 text-red-400">command not found: ${cmd}</div>`;
+                log.innerHTML += `<div class="mb-2 text-red-400">Comando no encontrado: "${cmd}"</div>`;
+                log.innerHTML += `<div class="mb-4 text-white">${termData.commands.help}</div>`;
             }
 
             this.value = '';

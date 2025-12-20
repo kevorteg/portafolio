@@ -40,6 +40,7 @@ Abre la terminal y prueba estos comandos:
 *   `matrix`: Activa el efecto de lluvia de código.
 *   `hack`: Simula una secuencia de hackeo básica.
 *   `hackme`: ⚠️ **¡ADVERTENCIA!** Simula un hackeo masivo del sistema (Prueba bajo tu propio riesgo).
+*   `rick`: ¿Te atreves? 🎵
 *   `thanos` / `delete`: Chasquea los dedos y borra el universo (recarga la página).
 *   `destroy`: Simula un fallo crítico del kernel.
 *   `cat`: Muestra gatitos ASCII aleatorios 🐱
