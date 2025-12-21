@@ -188,18 +188,84 @@ function getBotResponse(input) {
 
     // THANOS SNAP
     if (msg.includes('thanos') || msg.includes('snap') || msg.includes('inevitable')) {
+        new Audio('https://www.soundjay.com/human/sounds/finger-snap-1.mp3').play();
         setTimeout(() => {
             document.body.style.transition = "all 2s ease";
             document.body.style.filter = "grayscale(100%) blur(5px)";
             document.body.style.opacity = "0";
             document.body.style.transform = "scale(0.9)";
             setTimeout(() => window.location.reload(), 3000);
-        }, 2000);
+        }, 1500);
         return "Yo soy... inevitable. 🫰 (Chasquido)";
     }
 
+    // --- STEROIDS FEATURES (Nuevas Funciones) ---
+
+    // 1. WEB SEARCH
+    if (msg.includes('busca') || msg.includes('google') || msg.includes('investiga')) {
+        const query = msg.replace('busca', '').replace('google', '').replace('investiga', '').replace('en', '').trim();
+        if (query) {
+            window.open('https://www.google.com/search?q=' + encodeURIComponent(query), '_blank');
+            return `Buscando "${query}" en la red... 🔍`;
+        } else {
+            return "Dime qué quieres buscar. Ej: 'Busca gatitos'.";
+        }
+    }
+
+    // 2. MATH / CALCULATOR
+    if (msg.includes('cuanto es') || msg.includes('calcula')) {
+        try {
+            const math = msg.replace(/[^0-9\+\-\*\/\.\(\)]/g, ''); // Extract numbers and operators
+            if (math) {
+                const result = eval(math); // Simple eval for demo
+                return `El resultado es: **${result}** 🧮`;
+            }
+        } catch (e) { }
+        return "No entendí la operación. Prueba: 'Cuánto es 5 + 5'";
+    }
+
+    // 3. JOKES
+    if (msg.includes('chiste') || msg.includes('broma') || msg.includes('reir')) {
+        const jokes = [
+            "¿Por qué el desarrollador quebró? Porque usó todo su caché. 💸",
+            "¡Toc, toc! ¿Quién es? ...Java. (Tarda en cargar)",
+            "Un SQL entra a un bar y pregunta: ¿Puedo unirme? (JOIN)",
+            "¿Qué hace un servidor en una piscina? ¡Nada!",
+            "Existen 10 tipos de personas: las que saben binario y las que no."
+        ];
+        return jokes[Math.floor(Math.random() * jokes.length)] + " 🤣";
+    }
+
+    // 4. MOTIVATION
+    if (msg.includes('motiva') || msg.includes('consejo') || msg.includes('triste')) {
+        const quotes = [
+            "El único modo de hacer un gran trabajo es amar lo que haces. - Steve Jobs",
+            "No te preocupes si no funciona bien. Si todo estuviera bien, no tendrías trabajo (como programador).",
+            "El código limpio es como un buen chiste: no necesita explicación.",
+            "Cada bug es una oportunidad para aprender algo nuevo (y llorar un poco)."
+        ];
+        return quotes[Math.floor(Math.random() * quotes.length)] + " 💪";
+    }
+
+    // 5. WEATHER (MOCK)
+    if (msg.includes('clima') || msg.includes('tiempo')) {
+        return "Afuera: Probablemente soleado ☀️. Aquí adentro: Lluvia de código y vientos de 50 bugs/hora. 🌩️";
+    }
+
+    // 6. FAITH / CHRISTIAN MODE
+    if (msg.includes('dios') || msg.includes('biblia') || msg.includes('versiculo') || msg.includes('fe') || msg.includes('cristiano') || msg.includes('orar')) {
+        let v;
+        if (typeof getRandomVerse === 'function') {
+            v = getRandomVerse(); // Global helper
+        } else {
+            // Fallback if file not loaded
+            v = { text: "Todo lo puedo en Cristo que me fortalece.", ref: "Filipenses 4:13" };
+        }
+        return "📖 **Palabra del día:**<br>_" + v.text + "_<br>**" + v.ref + "** ❤️";
+    }
+
     // Default
-    return "Mmm, no estoy seguro. Pero puedo abrir aplicaciones (CV, Terminal, Mail), decirte la hora ⌚, controlar la música 🎵 o incluso invocar a Thanos 🫰. ¡Pruébame! 🤖";
+    return "Soy **KevinBot v3.5 (Edición Fe)**. Puedo:\n- 🔍 Buscar\n- 📖 Darte un versículo\n- 🤣 Contar chistes\n- 🎵 Poner música\n- 💻 Controlar el sistema\n- 🫰 Thanos Snap.";
 }
 
 // HELPERS

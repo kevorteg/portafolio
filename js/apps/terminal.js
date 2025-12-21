@@ -493,6 +493,7 @@ function triggerFireworks(log) {
 
 function triggerThanosSnap(logElement) {
     logElement.innerHTML += `<div class="mb-2 text-purple-500 font-bold">"Yo soy... inevitable." 🫰</div>`;
+    new Audio('https://www.soundjay.com/human/sounds/finger-snap-1.mp3').play();
 
     setTimeout(() => {
         document.body.style.transition = "all 2s ease";
