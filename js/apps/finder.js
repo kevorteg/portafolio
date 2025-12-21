@@ -26,6 +26,15 @@ const projectsData = {
 };
 
 const folderData = {
+    'about': {
+        title: "Sobre Mí",
+        items: [
+            { name: "Mi Perfil.cv", img: "https://img.icons8.com/fluency/96/resume-website.png", action: "PreviewApp.open('profile')" },
+            { name: "Mi Setup.jpg", img: "https://img.icons8.com/fluency/96/monitor.png", action: "PreviewApp.open('setup')" },
+            { name: "Playlist.mp3", img: "https://img.icons8.com/fluency/96/spotify.png", action: "openApp('music')" },
+            { name: "Contactame.msg", img: "https://img.icons8.com/fluency/96/mail.png", action: "openApp('mail')" }
+        ]
+    },
     'design': {
         title: "Diseño y Creatividad",
         items: [
@@ -62,7 +71,7 @@ const folderData = {
 
 // Ensure we export or expose these if needed, but for now they are global
 // Initial render reference
-let currentFolder = 'design';
+let currentFolder = 'about';
 
 function openFolder(folderId) {
     if (!folderData[folderId]) return;
@@ -89,6 +98,7 @@ function renderFinderWindow() {
             if (key === 'design') icon = 'fa-palette';
             if (key === 'programming') icon = 'fa-code';
             if (key === 'ai') icon = 'fa-brain';
+            if (key === 'about') icon = 'fa-user-circle';
             if (key === 'projects') icon = 'fa-briefcase';
 
             return `

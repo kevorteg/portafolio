@@ -3,10 +3,10 @@ const termData = {
     historyIndex: -1,
     commands: {
         help: "Comandos Disponibles:<br>📂 SISTEMA (Admin):<br>- ls: Listar archivos<br>- hackme: Diagnóstico Seguridad<br>- thanos: Optimizar Caché<br>- destroy: Check Disk<br>- hack: Test de Red<br>- cat: System Logs<br>- party: Config. Pantalla<br><br>ℹ️ INFO:<br>- about: Sobre mí<br>- skills: Habilidades<br>- projects: Proyectos<br>- contact: Contacto<br>- social: Redes<br>- clear: Limpiar",
-        about: "Soy Kevin Ortega, desarrollador full-stack creativo.",
-        skills: "JS, Python, React, Node, SQL, AWS.",
-        projects: "Mis repos: https://github.com/kevorteg",
-        contact: "Usa la app Mail o revisa mi GitHub.",
+        about: "Kevin Ortega. Creativo digital, Investigador & Desarrollador. 📍 Colombia.",
+        skills: "HTML, CSS, JS, Python, Diseño, Branding, Estrategia Digital.",
+        projects: "KRE-ACTIVA, Misión Juvenil, Proyectos Independientes. Usa el comando 'open preview' para ver detalles.",
+        contact: "📧 milife.ortega2000@gmail.com | 📱 315 049 9783",
         date: new Date().toString(),
         whoami: "guest@kevinos",
         sudo: "root: Permiso denegado. Intenta decir 'por favor' (mentira, no funciona).",
@@ -103,8 +103,8 @@ function initTerminal() {
                     log.innerHTML += `
                             <div class="mb-4 flex flex-col cursor-pointer">
                                 <span onclick="window.open('https://github.com/kevorteg')" class="text-blue-400 hover:underline">GitHub</span>
-                                <span onclick="window.open('mailto:contact@kevinos.dev')" class="text-purple-400 hover:underline">Email</span>
-                                <span class="text-gray-500">Twitter: @kevorteg (Proximamente)</span>
+                                <span class="text-purple-400">📧 milife.ortega2000@gmail.com</span>
+                                <span class="text-gray-500">📱 315 049 9783</span>
                             </div>
                         `;
                 } else if (action === 'COFFEE_ACTION') {
@@ -147,26 +147,8 @@ function initTerminal() {
             \\___/
                         </div>`;
                 } else if (action === 'PARTY_ACTION') {
-                    log.innerHTML += `<div class="mb-4 text-2xl animate-pulse">🎉🎈👯‍♂️💃🕺🪩🍻🎊</div>`;
-                    const rain = setInterval(() => {
-                        const confetti = document.createElement('div');
-                        confetti.innerText = ['🎉', '🎈', '✨', '🎊'][Math.floor(Math.random() * 4)];
-                        confetti.style.position = 'fixed';
-                        confetti.style.left = Math.random() * 100 + 'vw';
-                        confetti.style.top = '-50px';
-                        confetti.style.fontSize = '24px';
-                        confetti.style.transition = 'top 3s ease-in';
-                        confetti.style.zIndex = '999999';
-                        document.body.appendChild(confetti);
-
-                        setTimeout(() => {
-                            confetti.style.top = '110vh';
-                        }, 100);
-
-                        setTimeout(() => confetti.remove(), 3000);
-                    }, 100);
-
-                    setTimeout(() => clearInterval(rain), 3000);
+                    log.innerHTML += `<div class="mb-4 text-2xl animate-pulse">🎉✨ FIESTA INICIADA ✨🎉</div>`;
+                    triggerFireworks(log);
                 } else if (action === 'WEATHER_ACTION') {
                     const weathers = [
                         "☀️ 25°C - Soleado con probabilidad de código limpio.",
@@ -208,12 +190,15 @@ function initTerminal() {
                         else log.innerHTML += `<div class="mb-4 text-red-400">Error: El directorio ya existe.</div>`;
                     }
                 } else if (action === 'RM_ACTION') {
-                    if (!args) {
-                        log.innerHTML += `<div class="mb-4 text-red-400">Uso: rm &lt;archivo/carpeta&gt;</div>`;
-                    } else {
-                        const success = window.FileSystem.deleteItem(args);
-                        if (success) log.innerHTML += `<div class="mb-4 text-yellow-400">Item '${args}' eliminado.</div>`;
+                    if (args.includes('-rf') && (args.includes('/') || args.includes('*'))) {
+                        triggerSelfDestruct(log);
+                    } else if (args) {
+                        const item = args.split(' ')[0]; // Simple logic
+                        const success = window.FileSystem.deleteItem(item);
+                        if (success) log.innerHTML += `<div class="mb-4 text-yellow-400">Item '${item}' eliminado.</div>`;
                         else log.innerHTML += `<div class="mb-4 text-red-400">Error: No encontrado.</div>`;
+                    } else {
+                        log.innerHTML += `<div class="mb-4 text-red-400">Uso: rm &lt;archivo/carpeta&gt;</div>`;
                     }
                 } else if (action === 'CAT_ACTION') {
                     if (args) {
@@ -263,64 +248,18 @@ ZZZzz /, \`.-'\`'    -.  ;-;;,_
                     cover.onclick = () => cover.remove();
                     document.body.appendChild(cover);
                 } else if (action === 'DESTROY_ACTION') {
-                    log.innerHTML += `<div class="mb-1 text-red-500 font-bold">⚠️ INICIANDO SECUENCIA DE AUTODESTRUCCIÓN...</div>`;
-                    let count = 0;
-                    const crash = setInterval(() => {
-                        log.innerHTML += `<div class="text-red-600 text-xs">ERROR_KERNEL_PANIC_NODE_${Math.random().toString(16).substr(2, 8)}</div>`;
-                        document.getElementById('terminal-output').scrollTop = document.getElementById('terminal-output').scrollHeight;
-                        count++;
-                        if (count > 50) {
-                            clearInterval(crash);
-                            log.innerHTML += `<div class="mt-4 text-green-400">...Es broma. Sistema estable. 😅</div>`;
-                            document.getElementById('terminal-output').scrollTop = document.getElementById('terminal-output').scrollHeight;
-                        }
-                    }, 50);
+                    triggerSelfDestruct(log);
                 } else if (action === 'LOVE_ACTION') {
-                    log.innerHTML += `
-                        <div class="mb-4 text-pink-500 font-mono whitespace-pre text-xs">
-    ******       ******
-    **      **   **      **
-    **        *****        **
-    **         ***         **
-    **         *         **
-    **               **
-        **           **
-        **       **
-            **   **
-            ***
-                *
-        KevinOS loves you!
-                        </div>`;
+                    log.innerHTML += `<div class="mb-4 text-pink-500">❤️ sending love to kevin... done.</div>`;
                 } else if (action === 'LINUX_ACTION') {
-                    log.innerHTML += `
-                        <div class="mb-4 text-white font-mono whitespace-pre text-xs">
-            _nnnn_
-            dGGGGMMb
-        @p~qp~~qMb
-        M|@||@) M|
-        @,----.JM|
-        JS^\\__/  qKL
-        dZP        qKRb
-        dZP          qKKb
-    fZP            SMMb
-    HZM            MMMM
-    FqM            MMMM
-    __| ".        |\\dS"qML
-    |    \`.       | \`' \\Zq
-    _)      \\.___.,|     .'
-    \\____   )MMMMMP|   .'
-        \`-'       \`--'
-        I use KevinOS btw.
-                        </div>`;
+                    log.innerHTML += `<div class="mb-4 text-white">I'd just like to interject for a moment. What you're referring to as Linux, is in fact, GNU/Linux...</div>`;
                 } else if (action === 'PING_ACTION') {
-                    log.innerHTML += `<div class="mb-4 text-white">Pong! 🏓 <span class="text-gray-500">(Latencia: 0ms - Estoy en tu navegador, crack)</span></div>`;
+                    log.innerHTML += `<div class="mb-4 text-white">pong! time=0.00ms</div>`;
                 } else if (action === 'HACKME_ACTION') {
                     triggerHackMeEffect(log);
                 } else if (action === 'RICK_ACTION') {
-                    log.innerHTML += `<div class="mb-4 text-green-400">Listando archivos del sistema...</div>`;
-                    setTimeout(() => {
-                        window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
-                    }, 1500);
+                    window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
+                    log.innerHTML += `<div class="mb-4 text-pink-500">🕺 Never gonna give you up...</div>`;
                 } else {
                     log.innerHTML += `<div class="mb-4 text-green-400 opacity-90">${action}</div>`;
                 }
@@ -330,6 +269,7 @@ ZZZzz /, \`.-'\`'    -.  ;-;;,_
             }
 
             this.value = '';
+            // Auto scroll
             document.getElementById('terminal-output').scrollTop = document.getElementById('terminal-output').scrollHeight;
         } else if (e.key === 'ArrowUp') {
             e.preventDefault();
@@ -343,11 +283,48 @@ ZZZzz /, \`.-'\`'    -.  ;-;;,_
                 termData.historyIndex++;
                 this.value = termData.history[termData.historyIndex];
             } else {
-                this.value = '';
                 termData.historyIndex = termData.history.length;
+                this.value = '';
             }
         }
     });
+}
+
+function triggerSelfDestruct(log) {
+    const messages = [
+        "WARNING: ROOT PRIVILEGES DETECTED.",
+        "CRITICAL: DELETING SYSTEM32...",
+        "DELETING USER DATA...",
+        "DELETING KEVIN...",
+        "KERNEL PANIC: 0xDEADBEEF"
+    ];
+
+    let delay = 0;
+    messages.forEach((msg, i) => {
+        setTimeout(() => {
+            log.innerHTML += `< div class= "mb-1 text-red-600 font-bold font-mono uppercase bg-black/50 p-1" > ${msg}</div > `;
+            document.getElementById('terminal-output').scrollTop = document.getElementById('terminal-output').scrollHeight;
+        }, delay);
+        delay += 800;
+    });
+
+    setTimeout(() => {
+        const body = document.body;
+        body.style.transition = "all 2s ease-in-out";
+        body.style.filter = "invert(1) hue-rotate(180deg) blur(2px)";
+        body.style.transform = "scale(0.9) rotate(5deg)";
+    }, 2000);
+
+    setTimeout(() => {
+        document.body.innerHTML = `
+    < div style = "height:100vh; background:black; color:#0f0; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:monospace; padding-top:20vh;" >
+                <h1 style="font-size:4rem; color:red;">SYSTEM FAILURE</h1>
+                <p>Todo ha sido eliminado.</p>
+                <p style="margin-top:2rem; color:white;">Es broma. 🤡</p>
+                <button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; background:#333; color:white; border:1px solid #555; cursor:pointer;">RESTAURAR SISTEMA</button>
+            </div >
+        `;
+    }, 5000);
 }
 
 function startMatrixEffect() {
@@ -422,8 +399,100 @@ function simulateHack(logElement) {
     }, 800);
 }
 
+function triggerFireworks(log) {
+    // Flash effect
+    const flash = document.createElement('div');
+    flash.className = 'fixed inset-0 bg-white z-[9999] opacity-0 pointer-events-none';
+    flash.style.transition = 'opacity 0.1s';
+    document.body.appendChild(flash);
+
+    // Beat flash loop
+    let flashes = 0;
+    const beat = setInterval(() => {
+        flash.style.opacity = '0.2';
+        setTimeout(() => flash.style.opacity = '0', 50);
+        flashes++;
+        if (flashes > 20) { clearInterval(beat); flash.remove(); }
+    }, 468); // ~128 BPM
+
+    // Canvas Fireworks
+    const canvas = document.createElement('canvas');
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+    canvas.style.zIndex = '999998';
+    canvas.style.pointerEvents = 'none';
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+
+    function createExplosion(x, y, color) {
+        for (let i = 0; i < 30; i++) {
+            particles.push({
+                x: x, y: y,
+                dx: (Math.random() - 0.5) * 15,
+                dy: (Math.random() - 0.5) * 15,
+                color: color || `hsl(${Math.random() * 360}, 100%, 50%)`,
+                life: 100,
+                alpha: 1,
+                grav: 0.1
+            });
+        }
+    }
+
+    function animate() {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Trails
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.globalCompositeOperation = 'lighter';
+
+        for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            p.x += p.dx;
+            p.y += p.dy;
+            p.dy += p.grav;
+            p.life--;
+            p.alpha -= 0.02;
+
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = Math.max(0, p.alpha);
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (p.life <= 0 || p.alpha <= 0) {
+                particles.splice(i, 1);
+                i--;
+            }
+        }
+
+        if (document.body.contains(canvas)) requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Launch sequence
+    let launches = 0;
+    const launchInt = setInterval(() => {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * (canvas.height * 0.6);
+        createExplosion(x, y);
+        launches++;
+        if (launches > 15) {
+            clearInterval(launchInt);
+            setTimeout(() => canvas.remove(), 2000);
+        }
+    }, 600);
+}
+
 function triggerThanosSnap(logElement) {
-    logElement.innerHTML += `<div class="text-purple-500 font-bold mb-2">"Yo soy... inevitable." 🫰</div>`;
+    logElement.innerHTML += `<div class="mb-2 text-purple-500 font-bold">"Yo soy... inevitable." 🫰</div>`;
 
     setTimeout(() => {
         document.body.style.transition = "all 2s ease";
@@ -439,7 +508,7 @@ function triggerThanosSnap(logElement) {
 
 function triggerHackMeEffect(logElement) {
     // 1. Ominous initial message
-    logElement.innerHTML += `<div class="text-red-500 font-bold blinkable">☠️ INICIANDO PROTOCOLO CERO...</div>`;
+    logElement.innerHTML += `<div class="mb-4 text-red-500 font-bold blinkable">☠️ INICIANDO PROTOCOLO CERO...</div>`;
 
     // Create Scary Glitch Overlay
     const overlay = document.createElement('div');
@@ -448,7 +517,7 @@ function triggerHackMeEffect(logElement) {
 
     // Scary HUD
     overlay.innerHTML = `
-            <div class="absolute inset-0 bg-red-900/20 pointer-events-none" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 0, 0, 0.1) 4px);"></div>
+    <div class="absolute inset-0 bg-red-900/20 pointer-events-none" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 0, 0, 0.1) 4px);"></div>
             
             <div class="relative z-10 p-10 border-4 border-red-600 bg-black/90 text-red-500 text-center shadow-[0_0_50px_rgba(255,0,0,0.8)] animate-pulse">
                 <i class="fas fa-exclamation-triangle text-6xl mb-6"></i>
@@ -485,13 +554,13 @@ function triggerHackMeEffect(logElement) {
             setTimeout(() => {
                 // The Reveal
                 overlay.innerHTML = `
-                    <div class="text-center p-10">
+        < div class= "text-center p-10" >
                         <div class="text-8xl mb-4">🤡</div>
                         <h1 class="text-4xl text-green-500 font-bold mb-4">¡CAÍSTE!</h1>
                         <p class="text-white text-xl">Tu sistema está seguro. (Creo).</p>
                         <button id="hack-close-btn" class="mt-8 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-500">Volver a respirar</button>
-                    </div>
-                    `;
+                    </div >
+        `;
 
                 document.getElementById('hack-close-btn').onclick = () => {
                     overlay.style.opacity = '0';
