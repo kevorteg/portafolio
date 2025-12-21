@@ -164,3 +164,5 @@ const PreviewApp = {
         PreviewApp.open();
     }
 };
+
+window.PreviewApp = PreviewApp;
