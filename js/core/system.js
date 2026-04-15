@@ -10,12 +10,8 @@ let unlockAttempts = 0;
 
 function runBootSequence() {
     const boot = document.getElementById('boot-screen');
-    const fill = document.getElementById('boot-fill');
-
-    // Start animation
-    setTimeout(() => { fill.style.width = '100%'; }, 100);
-
-    // Fade out
+    // The loading bar inside boot screen uses an animation keyframe directly in HTML
+    // We just handle the fade out after 2.8s
     setTimeout(() => {
         boot.style.opacity = '0';
         setTimeout(() => { boot.style.display = 'none'; }, 1000);
@@ -26,8 +22,9 @@ function updateClock() {
     const now = new Date();
     const days = ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'];
     const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    const pad = n => n < 10 ? '0' + n : n;
     const clockEl = document.getElementById('clock');
-    if (clockEl) clockEl.innerText = `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]}  ${now.getHours()}:${now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()}`;
+    if (clockEl) clockEl.innerText = `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]}  ${pad(now.getHours())}:${pad(now.getMinutes())}`;
     const wd = document.getElementById('widget-day');
     const d = document.getElementById('widget-date');
     if (wd) wd.innerText = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'][now.getDay()];
@@ -70,14 +67,17 @@ function toggleLaunchpad(force) {
     else { lp.style.opacity = '0'; setTimeout(() => lp.style.display = 'none', 300); }
 }
 
+// Legacy alias — now handled by spotlight.js
 function handleSpotlight(e) {
-    if (e.key === 'Enter') {
-        const val = e.target.value.toLowerCase();
-        if (val.includes('ia')) openApp('ai');
-        else if (val.includes('word')) openApp('word');
-        else if (val.includes('safari')) openApp('safari');
-        toggleSpotlight();
-        e.target.value = "";
+    if (typeof handleSpotlightKey === 'function') handleSpotlightKey(e);
+}
+
+function toggleSpotlight() {
+    const sp = document.getElementById('spotlight');
+    if (sp.style.display === 'flex') {
+        if (typeof closeSpotlight === 'function') closeSpotlight();
+    } else {
+        if (typeof openSpotlight === 'function') openSpotlight();
     }
 }
 
@@ -95,35 +95,32 @@ function showContextMenu(e) {
 function hideContextMenu() { const m = document.getElementById('context-menu'); if (m) m.style.display = 'none'; }
 
 function unlock() {
-    const pass = document.getElementById('lock-password');
     const container = document.getElementById('lock-container');
-    if (!pass || pass.value.trim() === "") return;
-    if (unlockAttempts === 0) {
-        container.classList.add('shaking');
-        document.getElementById('lock-error-msg').style.opacity = '1';
-        setTimeout(() => { container.classList.remove('shaking'); unlockAttempts++; }, 500);
-    } else {
-        // HACK SUCCESS MODE
-        document.getElementById('lock-error-msg').style.opacity = '0';
-        pass.style.color = '#4ade80'; // Green text
-        pass.value = "ACCESO CONCEDIDO";
-        const msg = document.createElement('div');
-        msg.innerText = "¡Has hackeado el sistema! Felicidades 🔓";
-        msg.className = "text-green-400 font-bold mt-4 animate-pulse";
-        container.appendChild(msg);
+    const lockScreen = document.getElementById('lock-screen');
+    const statusText = document.getElementById('lock-password-container');
 
-        setTimeout(() => {
-            document.getElementById('lock-screen').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('lock-screen').style.display = 'none';
-                msg.remove(); // Cleanup
-                pass.value = "";
-                pass.style.color = "";
-                window.dispatchEvent(new CustomEvent('system:unlocked'));
-                Desktop.login(); // Save Auth
-            }, 500);
-        }, 1500);
+    if (statusText) {
+        statusText.innerText = "ACCESO CONCEDIDO";
+        statusText.style.color = "#4ade80";
+        statusText.classList.add('bg-green-500/20');
     }
+
+    const msg = document.createElement('div');
+    msg.innerText = "Bienvenido de nuevo 🔓";
+    msg.className = "text-green-400 font-bold mt-4 animate-pulse";
+    container.appendChild(msg);
+
+    setTimeout(() => {
+        lockScreen.style.opacity = '0';
+        setTimeout(() => {
+            lockScreen.style.display = 'none';
+            msg.remove();
+            window.dispatchEvent(new CustomEvent('system:unlocked'));
+            if (typeof Desktop !== 'undefined' && Desktop.login) {
+                Desktop.login();
+            }
+        }, 500);
+    }, 800);
 }
 
 function lockManual() {

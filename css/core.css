@@ -117,7 +117,7 @@ html {
     backdrop-filter: blur(50px);
     border-radius: 12px;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
+    overflow: visible;            /* allows resize handles outside the border */
     display: none;
     flex-direction: column;
     border: 0.5px solid rgba(255, 255, 255, 0.2);
@@ -126,13 +126,66 @@ html {
     z-index: 100;
 }
 
+/* Clip the inner content so it doesn't overflow visually */
+.window > *:not(.resize-handle) {
+    overflow: hidden;
+}
+
+/* ── Resize Handles ───────────────────────────────────────────── */
+.resize-handle {
+    position: absolute;
+    z-index: 9999;
+}
+
+/* Edges */
+.resize-n  { top: -4px;    left: 8px;    right: 8px;   height: 8px;  cursor: n-resize; }
+.resize-s  { bottom: -4px; left: 8px;    right: 8px;   height: 8px;  cursor: s-resize; }
+.resize-e  { right: -4px;  top: 8px;     bottom: 8px;  width: 8px;   cursor: e-resize; }
+.resize-w  { left: -4px;   top: 8px;     bottom: 8px;  width: 8px;   cursor: w-resize; }
+
+/* Corners */
+.resize-ne { top: -4px;    right: -4px;  width: 16px; height: 16px; cursor: ne-resize; }
+.resize-nw { top: -4px;    left: -4px;   width: 16px; height: 16px; cursor: nw-resize; }
+.resize-se { bottom: -4px; right: -4px;  width: 16px; height: 16px; cursor: se-resize; }
+.resize-sw { bottom: -4px; left: -4px;   width: 16px; height: 16px; cursor: sw-resize; }
+
+/* ── Snap Zones (Windows 11 style) ─────────────────────────────── */
+#snap-zones {
+    display: none;
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+}
+
+.snap-zone {
+    position: absolute;
+    background: rgba(0, 122, 255, 0.15);
+    border: 2px solid rgba(0, 122, 255, 0.4);
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.snap-zone.snap-zone-active {
+    opacity: 1;
+    background: rgba(0, 122, 255, 0.25);
+    border-color: rgba(0, 122, 255, 0.8);
+}
+
+#snap-left  { top: 36px; left: 4px;   width: calc(50% - 8px); bottom: 4px; }
+#snap-right { top: 36px; right: 4px;  width: calc(50% - 8px); bottom: 4px; }
+#snap-top   { top: 36px; left: 4px;   right: 4px;             bottom: 4px; }
+
 .window-header {
     height: 40px;
     background: rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
     padding: 0 16px;
-    cursor: default;
+    cursor: move;
+    user-select: none;
 }
 
 .traffic-lights {
@@ -177,20 +230,66 @@ html {
 /* Spotlight Search */
 #spotlight {
     position: fixed;
-    top: 20%;
+    top: 15%;
     left: 50%;
     transform: translateX(-50%);
-    width: 600px;
-    background: rgba(40, 40, 42, 0.8);
-    backdrop-filter: blur(50px);
-    border-radius: 15px;
+    width: 640px;
+    max-width: 94vw;
+    background: rgba(28, 28, 30, 0.92);
+    backdrop-filter: blur(60px);
+    border-radius: 18px;
     border: 0.5px solid rgba(255, 255, 255, 0.2);
     z-index: 40000;
     display: none;
     flex-direction: column;
-    padding: 15px;
+    padding: 14px 16px;
     box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8);
 }
+
+/* Divider when results appear */
+#spotlight-results:not(.hidden) {
+    border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+    padding-top: 8px;
+}
+
+/* Category heading */
+.spotlight-category {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.35);
+    padding: 8px 10px 4px;
+}
+
+/* Result row */
+.spotlight-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.12s;
+    color: white;
+}
+.spotlight-item:hover,
+.spotlight-item.spotlight-active {
+    background: rgba(0, 122, 255, 0.35);
+}
+.spotlight-item-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    shrink: 0;
+}
+.spotlight-item-text { flex: 1; }
+.spotlight-item-title { font-size: 13px; font-weight: 600; }
+.spotlight-item-sub   { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 1px; }
 
 /* Control Center */
 #control-center {

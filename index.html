@@ -1,14 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kevin Ortega | Diseñador Multimedia &amp; Desarrollador Web</title>
+    <meta name="description" content="Portafolio de Kevin Ortega — Diseñador Multimedia y Desarrollador Web de Colombia. Especialista en HTML, CSS, JavaScript, Python y diseño creativo. Explora mi trabajo interactivo en KevinOS.">
+    <meta name="author" content="Kevin Ortega">
+    <meta name="keywords" content="Kevin Ortega, portafolio, diseñador web, desarrollador, Colombia, JavaScript, Python, HTML, CSS, KevinOS">
+    <meta property="og:title" content="Kevin Ortega | KevinOS — Portafolio Interactivo">
+    <meta property="og:description" content="Un portafolio único al estilo macOS. Diseñador Multimedia y Dev desde Colombia.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kevorteg.github.io/portafolio/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Kevin Ortega | KevinOS">
+    <meta name="twitter:description" content="Portafolio interactivo al estilo macOS de Kevin Ortega.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/core.css">
     <link rel="stylesheet" href="css/apps.css">
-    <title>Portafolio</title>
 </head>
 
 <body onclick="hideAllModals()">
@@ -49,11 +59,12 @@
             </div>
             <h1 id="lock-username" class="text-3xl font-bold text-white mb-10">Kevin</h1>
             <div class="relative w-64">
-                <input type="password" id="lock-password" placeholder="Cualquier clave para entrar"
-                    class="w-full bg-white/10 border border-white/20 rounded-full px-5 py-2.5 text-white text-center outline-none focus:bg-white/20 transition-all placeholder:text-white/30"
-                    onkeydown="if(event.key==='Enter') unlock()">
+                <div id="lock-password-container" class="w-full bg-white/10 border border-white/20 rounded-full px-5 py-2.5 text-white/50 text-center text-sm mb-4 cursor-default backdrop-blur-sm">
+                    Presiona el botón para entrar
+                </div>
                 <button onclick="unlock()"
-                    class="absolute right-2 top-2 w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-white/60">
+                    class="w-full bg-white text-black font-bold rounded-full py-3 flex items-center justify-center gap-2 hover:bg-gray-200 transition-all active:scale-95">
+                    <span>Iniciar Sesión</span>
                     <i class="fas fa-arrow-right text-xs"></i>
                 </button>
             </div>
@@ -64,12 +75,18 @@
 
     <!-- Utilities (Hidden/Overlay) -->
     <div id="spotlight" onclick="event.stopPropagation()">
+        <!-- Search Input Bar -->
         <div class="flex items-center gap-4 px-2">
             <i class="fas fa-search text-white/40 text-xl"></i>
-            <input type="text" id="spotlight-input" placeholder="Buscar en KevinOS"
-                class="bg-transparent text-white text-2xl outline-none w-full font-light"
-                onkeydown="handleSpotlight(event)">
+            <input type="text" id="spotlight-input" placeholder="Buscar apps, proyectos, habilidades..."
+                class="bg-transparent text-white text-xl outline-none w-full font-light"
+                oninput="handleSpotlightSearch(this.value)"
+                onkeydown="handleSpotlightKey(event)"
+                autocomplete="off">
+            <span class="text-white/20 text-xs whitespace-nowrap">Esc para cerrar</span>
         </div>
+        <!-- Results Panel -->
+        <div id="spotlight-results" class="mt-2 max-h-80 overflow-y-auto custom-scrollbar hidden"></div>
     </div>
 
     <div id="context-menu" onclick="event.stopPropagation()">
@@ -226,6 +243,12 @@
                 <img src="https://img.icons8.com/fluency/96/google-logo.png" class="launchpad-icon">
                 <span class="text-white text-sm">Gemini</span>
             </div>
+
+            <!-- GitHub Projects -->
+            <div class="launchpad-item" onclick="openFolder('projects')">
+                <div class="launchpad-icon bg-gray-900 text-white"><i class="fab fa-github text-4xl"></i></div>
+                <span class="text-white text-sm">Proyectos</span>
+            </div>
         </div>
     </div>
 
@@ -308,6 +331,16 @@
                 </div>
                 <span
                     class="text-white text-xs font-medium shadow-black/50 text-shadow text-center leading-tight bg-black/20 px-2 py-0.5 rounded-md backdrop-blur-sm">IA</span>
+            </div>
+
+            <!-- GitHub Projects -->
+            <div class="flex flex-col items-center gap-1 group cursor-pointer w-20" ondblclick="openFolder('projects')">
+                <div class="w-16 h-14 rounded-lg flex items-center justify-center transition-colors">
+                    <img src="https://img.icons8.com/fluency/96/folder-invoices.png"
+                        class="w-full h-full object-contain">
+                </div>
+                <span
+                    class="text-white text-xs font-medium shadow-black/50 text-shadow text-center leading-tight bg-black/20 px-2 py-0.5 rounded-md backdrop-blur-sm">Proyectos</span>
             </div>
         </div>
 
@@ -501,32 +534,110 @@
             </div>
 
             <!-- Finder -->
-            <div id="finder-window" class="window" style="width: 800px; height: 500px; top: 80px; left: 80px;"
+            <div id="finder-window" class="window" style="width: 860px; height: 520px; top: 80px; left: 80px;"
                 onmousedown="focusApp('finder')">
-                <div class="window-header" onmousedown="dragElement(this.parentElement)">
-                    <div class="traffic-lights">
+
+                <!-- ── Traffic Lights + Tab Bar ───────────────────────────────── -->
+                <div class="finder-chrome" onmousedown="dragElement(this.parentElement)">
+                    <!-- Traffic lights -->
+                    <div class="traffic-lights" onmousedown="event.stopPropagation()">
                         <div class="light light-close" onclick="closeApp('finder')"><i class="fas fa-times"></i></div>
-                        <div class="light light-min" onclick="minimizeApp('finder')"><i class="fas fa-minus"></i></div>
-                        <div class="light light-max" onclick="maximizeApp('finder')"><i class="fas fa-expand"></i></div>
+                        <div class="light light-min"   onclick="minimizeApp('finder')"><i class="fas fa-minus"></i></div>
+                        <div class="light light-max"   onclick="maximizeApp('finder')"><i class="fas fa-expand"></i></div>
                     </div>
-                    <div class="flex-1 text-center text-xs font-bold opacity-30">Finder</div>
+                    <!-- Tab strip -->
+                    <div id="finder-tabs" class="finder-tab-strip" onmousedown="event.stopPropagation()">
+                        <!-- injected by JS -->
+                    </div>
+                    <!-- New tab button -->
+                    <button class="finder-new-tab" onclick="finderNewTab()" title="Nueva pestaña" onmousedown="event.stopPropagation()">
+                        <i class="fas fa-plus"></i>
+                    </button>
                 </div>
-                <div class="flex h-full bg-white text-black">
+
+                <!-- ── Toolbar: Nav + Sort + View + Filter ───────────────────── -->
+                <div class="finder-toolbar" onmousedown="event.stopPropagation()">
+                    <!-- Nav arrows -->
+                    <button class="finder-toolbar-btn" onclick="finderNavBack()" title="Atrás"><i class="fas fa-chevron-left"></i></button>
+                    <button class="finder-toolbar-btn" onclick="finderNavForward()" title="Adelante"><i class="fas fa-chevron-right"></i></button>
+                    <button class="finder-toolbar-btn" onclick="finderNavUp()" title="Subir"><i class="fas fa-arrow-up"></i></button>
+                    <!-- Breadcrumb -->
+                    <div id="finder-breadcrumb" class="finder-breadcrumb">Inicio</div>
+                    <div style="flex:1"></div>
+                    <!-- Search in Finder -->
+                    <div class="finder-search-wrap">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="finder-search" placeholder="Buscar..." oninput="finderSearch(this.value)" onmousedown="event.stopPropagation()">
+                    </div>
+                    <!-- Sort -->
+                    <div class="finder-toolbar-group" id="finder-sort-group">
+                        <button class="finder-toolbar-btn finder-toolbar-label" onclick="toggleDropdown('finder-sort-dd')">
+                            <i class="fas fa-sort-amount-down-alt"></i> Ordenar
+                        </button>
+                        <div class="finder-dropdown hidden" id="finder-sort-dd">
+                            <div class="finder-dd-item" onclick="finderSort('name')"><i class="fas fa-font"></i> Nombre</div>
+                            <div class="finder-dd-item" onclick="finderSort('type')"><i class="fas fa-tag"></i> Tipo</div>
+                        </div>
+                    </div>
+                    <!-- View -->
+                    <div class="finder-toolbar-group" id="finder-view-group">
+                        <button class="finder-toolbar-btn finder-toolbar-label" onclick="toggleDropdown('finder-view-dd')">
+                            <i class="fas fa-th"></i> Vista
+                        </button>
+                        <div class="finder-dropdown hidden" id="finder-view-dd">
+                            <div class="finder-dd-item" onclick="finderSetView('grid')"><i class="fas fa-th-large"></i> Íconos grandes</div>
+                            <div class="finder-dd-item" onclick="finderSetView('list')"><i class="fas fa-list"></i> Lista</div>
+                            <div class="finder-dd-item" onclick="finderSetView('small')"><i class="fas fa-th"></i> Íconos pequeños</div>
+                        </div>
+                    </div>
+                    <!-- Filter -->
+                    <div class="finder-toolbar-group" id="finder-filter-group">
+                        <button class="finder-toolbar-btn finder-toolbar-label" onclick="toggleDropdown('finder-filter-dd')">
+                            <i class="fas fa-filter"></i> Filtrar
+                        </button>
+                        <div class="finder-dropdown hidden" id="finder-filter-dd">
+                            <div class="finder-dd-item" onclick="finderFilter('all')"><i class="fas fa-asterisk"></i> Todo</div>
+                            <div class="finder-dd-item" onclick="finderFilter('code')"><i class="fas fa-code"></i> Código</div>
+                            <div class="finder-dd-item" onclick="finderFilter('design')"><i class="fas fa-palette"></i> Diseño</div>
+                            <div class="finder-dd-item" onclick="finderFilter('python')"><i class="fab fa-python"></i> Python</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── Body: Sidebar + Content ───────────────────────────────── -->
+                <div class="flex h-full bg-white text-black" style="overflow:hidden; border-radius:0 0 12px 12px;">
                     <!-- Sidebar -->
-                    <div
-                        class="w-48 bg-gray-100/80 backdrop-blur-xl border-r border-gray-200 p-4 flex flex-col gap-6 text-xs font-medium">
+                    <div class="w-44 bg-gray-100/80 backdrop-blur-xl border-r border-gray-200 p-3 flex flex-col gap-4 text-xs font-medium shrink-0">
                         <div>
-                            <div class="opacity-50 mb-2 px-2">Favoritos</div>
-                            <div class="flex flex-col gap-1" id="finder-sidebar-list">
+                            <div class="opacity-40 mb-1 px-2 uppercase tracking-wider text-[10px] font-bold">Favoritos</div>
+                            <div class="flex flex-col gap-0.5" id="finder-sidebar-list">
                                 <!-- Dynamic Sidebar injected by js -->
                             </div>
                         </div>
+                        <!-- Quick Links -->
+                        <div>
+                            <div class="opacity-40 mb-1 px-2 uppercase tracking-wider text-[10px] font-bold">Accesos</div>
+                            <div class="flex flex-col gap-0.5">
+                                <a href="https://github.com/kevorteg" target="_blank"
+                                    class="flex items-center gap-2 p-2 rounded-md hover:bg-black/5 text-gray-600 cursor-pointer">
+                                    <i class="fab fa-github"></i> GitHub
+                                </a>
+                                <a href="mailto:milife.ortega2000@gmail.com"
+                                    class="flex items-center gap-2 p-2 rounded-md hover:bg-black/5 text-gray-600 cursor-pointer">
+                                    <i class="fas fa-envelope"></i> Email
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Content -->
-                    <div class="flex-1 flex flex-col">
-                        <div class="p-6 overflow-auto custom-scrollbar grid grid-cols-4 gap-6 content-start"
-                            id="finder-content-grid">
+                    <!-- Content Grid -->
+                    <div class="flex-1 flex flex-col overflow-hidden">
+                        <div id="finder-content-grid"
+                            class="p-6 overflow-auto custom-scrollbar grid grid-cols-4 gap-4 content-start flex-1">
                             <!-- Dynamic Content injected by js -->
+                        </div>
+                        <!-- Status bar -->
+                        <div id="finder-statusbar" class="finder-statusbar">
+                            <span id="finder-item-count">— elementos</span>
                         </div>
                     </div>
                 </div>
@@ -830,6 +941,14 @@
             <div class="dock-icon bg-yellow-400 text-white"><i class="fas fa-note-sticky text-2xl"></i></div>
             <div class="indicator" id="ind-notes"></div>
         </div>
+
+        <div class="w-[0.5px] h-10 bg-white/10 mx-1"></div>
+
+        <div class="dock-item" onclick="openFolder('projects')">
+            <div class="dock-tooltip">GitHub</div>
+            <div class="dock-icon bg-gray-900 text-white"><i class="fab fa-github text-2xl"></i></div>
+            <div class="indicator" id="ind-projects"></div>
+        </div>
     </div>
 
     </div>
@@ -974,6 +1093,42 @@
                 </div>
             </div>
 
+            <!-- GitHub Projects (Mobile) -->
+            <div class="bg-[#151517] border border-white/5 rounded-2xl p-5 shadow-lg">
+                <h2 class="text-lg font-bold mb-4 text-white flex items-center gap-2">
+                    <i class="fab fa-github text-white"></i> Proyectos GitHub
+                </h2>
+                <div class="flex flex-col gap-3">
+                    <a href="https://github.com/kevorteg/portafolio" target="_blank" class="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
+                        <span class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center text-yellow-400 shrink-0 text-sm font-bold">JS</span>
+                        <div><div class="font-bold text-white text-sm">KevinOS Portafolio</div><div class="text-xs text-gray-500">Web OS interactivo — HTML + JS</div></div>
+                    </a>
+                    <a href="https://github.com/kevorteg/cinegram-Bot" target="_blank" class="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
+                        <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 shrink-0 text-sm font-bold">Py</span>
+                        <div><div class="font-bold text-white text-sm">Cinegram Bot</div><div class="text-xs text-gray-500">Bot de Telegram para películas ⭐1</div></div>
+                    </a>
+                    <a href="https://github.com/kevorteg/Universal-Downloader-Pro" target="_blank" class="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
+                        <span class="w-8 h-8 rounded-lg bg-blue-700/20 flex items-center justify-center text-blue-300 shrink-0 text-sm font-bold">TS</span>
+                        <div><div class="font-bold text-white text-sm">Universal Downloader Pro</div><div class="text-xs text-gray-500">Next.js — descargador multi-plataforma</div></div>
+                    </a>
+                    <a href="https://github.com/kevorteg/wp-api-protection" target="_blank" class="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
+                        <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 shrink-0 text-sm font-bold">PHP</span>
+                        <div><div class="font-bold text-white text-sm">WP API Protection</div><div class="text-xs text-gray-500">Plugin seguridad WordPress ⭐1</div></div>
+                    </a>
+                    <a href="https://github.com/kevorteg/misionjuvenild5" target="_blank" class="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
+                        <span class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center text-orange-400 shrink-0 text-sm font-bold">HTM</span>
+                        <div><div class="font-bold text-white text-sm">Misión Juvenil D5</div><div class="text-xs text-gray-500">Sitio web comunidad cristiana</div></div>
+                    </a>
+                    <a href="https://github.com/kevorteg/universal-media-bot" target="_blank" class="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
+                        <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 shrink-0 text-sm font-bold">Py</span>
+                        <div><div class="font-bold text-white text-sm">UMO-Core Media Bot</div><div class="text-xs text-gray-500">Orquestador de medios Flask/SocketIO</div></div>
+                    </a>
+                    <a href="https://github.com/kevorteg" target="_blank" class="flex items-center justify-center gap-2 text-xs text-blue-400 underline mt-1">
+                        <i class="fab fa-github"></i> Ver todos en GitHub →
+                    </a>
+                </div>
+            </div>
+
             <!-- Action Buttons -->
             <div class="flex flex-col gap-3 mt-2">
                 <div class="grid grid-cols-2 gap-3">
@@ -1000,7 +1155,7 @@
             </div>
 
             <p class="text-center text-[10px] text-gray-600 mt-2 pb-8">
-                KevinOS v4.0 Mobile Edition &copy; 2025
+                KevinOS v4.0 Mobile Edition &copy; 2026
             </p>
 
         </div>
@@ -1022,11 +1177,11 @@
 <script src="js/apps/terminal.js"></script>
 <script src="js/apps/safari.js"></script>
 <script src="js/apps/finder.js"></script>
+<script src="js/core/spotlight.js"></script>
 <script src="js/apps/mail.js"></script>
 <script src="js/apps/notes.js"></script>
 <script src="js/apps/ai.js"></script>
 <script src="js/apps/calculator.js"></script>
-<script src="js/core/notifications.js"></script>
 <script src="js/apps/chatbot.js"></script>
 <script src="js/apps/musicPlayer.js"></script>
 <script src="js/apps/tetris.js"></script>

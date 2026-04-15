@@ -6,6 +6,9 @@ const termData = {
         about: "Kevin Ortega. Creativo digital, Investigador & Desarrollador. 📍 Colombia.",
         skills: "HTML, CSS, JS, Python, Diseño, Branding, Estrategia Digital.",
         projects: "KRE-ACTIVA, Misión Juvenil, Proyectos Independientes. Usa el comando 'open preview' para ver detalles.",
+        cv: "Abrir mi Perfil Profesional.",
+        profile: "Abrir mi Perfil Profesional.",
+        resume: "Abrir mi Perfil Profesional.",
         contact: "📧 milife.ortega2000@gmail.com | 📱 315 049 9783",
         date: new Date().toString(),
         whoami: "guest@kevinos",
@@ -260,6 +263,13 @@ ZZZzz /, \`.-'\`'    -.  ;-;;,_
                 } else if (action === 'RICK_ACTION') {
                     window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
                     log.innerHTML += `<div class="mb-4 text-pink-500">🕺 Never gonna give you up...</div>`;
+                } else if (cmd === 'cv' || cmd === 'profile' || cmd === 'resume') {
+                    if (window.PreviewApp) {
+                        window.PreviewApp.open();
+                        log.innerHTML += `<div class="mb-4 text-blue-400">Abriendo Perfil Profesional...</div>`;
+                    } else {
+                        log.innerHTML += `<div class="mb-4 text-red-400">Error: No se pudo cargar la aplicación de perfil.</div>`;
+                    }
                 } else {
                     log.innerHTML += `<div class="mb-4 text-green-400 opacity-90">${action}</div>`;
                 }
