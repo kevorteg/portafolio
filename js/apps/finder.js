@@ -273,13 +273,21 @@ function renderFinderWindow() {
 function renderFinderTabs() {
     const strip = document.getElementById('finder-tabs');
     if (!strip) return;
-    strip.innerHTML = finderTabs.map((tab, i) => `
+    
+    const tabsHtml = finderTabs.map((tab, i) => `
         <div class="finder-tab ${i === finderActiveTab ? 'active' : ''}" onclick="finderSelectTab(${i})">
             <i class="fas ${folderData[tab.folderId]?.icon || 'fa-folder'}" style="font-size:10px;opacity:0.6"></i>
             ${tab.label.split(' ')[0]}
             <span class="finder-tab-close" onclick="finderCloseTab(${i}, event)">✕</span>
         </div>
     `).join('');
+
+    // Prepend tabs and keep the + button which is now inside the container
+    strip.innerHTML = tabsHtml + `
+        <button class="finder-new-tab" onclick="finderNewTab()" title="Nueva pestaña" onmousedown="event.stopPropagation()">
+            <i class="fas fa-plus"></i>
+        </button>
+    `;
 }
 
 function renderFinderBreadcrumb() {
