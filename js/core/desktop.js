@@ -195,13 +195,16 @@ const Desktop = {
 
             // Position menu (avoid overflow)
             menu.style.display = 'block';
-            let x = e.pageX, y = e.pageY;
-            setTimeout(() => {
+            let x = e.clientX, y = e.clientY;
+            
+            // Wait for DOM to render the menu to get its dimensions
+            requestAnimationFrame(() => {
                 if (x + menu.offsetWidth > window.innerWidth) x -= menu.offsetWidth;
                 if (y + menu.offsetHeight > window.innerHeight) y -= menu.offsetHeight;
-                menu.style.left = x + 'px';
-                menu.style.top  = y + 'px';
-            }, 0);
+                
+                menu.style.left = `${x}px`;
+                menu.style.top = `${y}px`;
+            });
         });
     },
 
