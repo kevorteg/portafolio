@@ -21,7 +21,7 @@
     overflow-x: auto;
     scrollbar-width: none;
     max-width: 520px;
-    flex: 1;
+    flex: 0 1 auto;
     height: 100%;
 }
 .finder-tab-strip::-webkit-scrollbar { display: none; }
@@ -63,15 +63,16 @@
 
 .finder-new-tab {
     width: 24px; height: 24px;
-    border-radius: 50%; border: none;
-    background: rgba(0,0,0,0.08);
+    border-radius: 6px; border: none;
+    background: transparent;
     color: #666; font-size: 11px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: background 0.15s;
     flex-shrink: 0;
+    margin-bottom: 4px; /* Align with tabs */
 }
-.finder-new-tab:hover { background: rgba(0,0,0,0.15); }
+.finder-new-tab:hover { background: rgba(0,0,0,0.06); }
 
 /* ── Finder Toolbar ─────────────────────────────────────────────── */
 .finder-toolbar {
