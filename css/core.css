@@ -1,8 +1,8 @@
 :root {
     --accent-color: #007AFF;
-    --apple-red: #FF5F56;
-    --apple-yellow: #FFBD2E;
-    --apple-green: #27C93F;
+    --sys-red: #FF5F56;
+    --sys-yellow: #FFBD2E;
+    --sys-green: #27C93F;
     --glass-light: rgba(255, 255, 255, 0.15);
     --bg-window: rgba(28, 28, 30, 0.85);
     --text-main: #ffffff;
@@ -216,15 +216,15 @@ html {
 }
 
 .light-close {
-    background: var(--apple-red);
+    background: var(--sys-red);
 }
 
 .light-min {
-    background: var(--apple-yellow);
+    background: var(--sys-yellow);
 }
 
 .light-max {
-    background: var(--apple-green);
+    background: var(--sys-green);
 }
 
 /* Spotlight Search */

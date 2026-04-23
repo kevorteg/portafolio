@@ -75,35 +75,66 @@ const folderData = {
         ]
     },
     'design': {
-        title: "Diseño y Creatividad", icon: 'fa-palette',
+        title: "Herramientas Creativas", icon: 'fa-palette',
         items: [
-            { name: "Photoshop",   img: "https://img.icons8.com/fluency/96/adobe-photoshop.png",   type: 'tool' },
-            { name: "Illustrator", img: "https://img.icons8.com/fluency/96/adobe-illustrator.png", type: 'tool' },
-            { name: "Blender",     img: "https://img.icons8.com/fluency/96/blender-3d.png",        type: 'tool' },
-            { name: "Premiere",    img: "https://img.icons8.com/fluency/96/adobe-premiere-pro.png",type: 'tool' },
-            { name: "DaVinci",     img: "https://img.icons8.com/fluency/96/video-editing.png",     type: 'tool' },
-            { name: "Canva",       img: "https://img.icons8.com/fluency/96/canva.png",             type: 'tool' }
+            { name: "Photoshop",   img: "https://img.icons8.com/fluency/96/adobe-photoshop.png",   type: 'tool', level: 95, desc: "Edición avanzada de imagen y retoque fotográfico." },
+            { name: "Illustrator", img: "https://img.icons8.com/fluency/96/adobe-illustrator.png", type: 'tool', level: 92, desc: "Diseño vectorial, logos e ilustración profesional." },
+            { name: "Blender",     img: "https://img.icons8.com/fluency/96/blender-3d.png",        type: 'tool', level: 85, desc: "Modelado 3D, animación y renderizado." },
+            { name: "Premiere",    img: "https://img.icons8.com/fluency/96/adobe-premiere-pro.png",type: 'tool', level: 90, desc: "Edición de video profesional y post-producción." },
+            { name: "DaVinci",     img: "https://img.icons8.com/fluency/96/video-editing.png",     type: 'tool', level: 88, desc: "Corrección de color y montaje cinematográfico." },
+            { name: "After Effects",img: "https://img.icons8.com/fluency/96/adobe-after-effects.png",type: 'tool', level: 80, desc: "Motion graphics y efectos visuales." },
+            { name: "Canva",       img: "https://img.icons8.com/fluency/96/canva.png",             type: 'tool', level: 98, desc: "Diseño rápido y contenido para redes sociales." }
         ]
     },
     'programming': {
         title: "Desarrollo y Código", icon: 'fa-code',
         items: [
-            { name: "HTML5",       img: "https://img.icons8.com/color/96/html-5--v1.png",          type: 'code' },
-            { name: "CSS3",        img: "https://img.icons8.com/color/96/css3.png",                type: 'code' },
-            { name: "JavaScript",  img: "https://img.icons8.com/color/96/javascript--v1.png",      type: 'code' },
-            { name: "Python",      img: "https://img.icons8.com/color/96/python--v1.png",          type: 'code' },
-            { name: "VS Code",     img: "https://img.icons8.com/fluency/96/visual-studio-code-2019.png", type: 'tool' },
-            { name: "Git",         img: "https://img.icons8.com/color/96/git.png",                 type: 'tool' }
+            { name: "HTML5",       img: "https://img.icons8.com/color/96/html-5--v1.png",          type: 'code', level: 98 },
+            { name: "CSS3",        img: "https://img.icons8.com/color/96/css3.png",                type: 'code', level: 96 },
+            { name: "JavaScript",  img: "https://img.icons8.com/color/96/javascript--v1.png",      type: 'code', level: 94 },
+            { name: "Python",      img: "https://img.icons8.com/color/96/python--v1.png",          type: 'code', level: 85 },
+            { name: "React",       img: "https://img.icons8.com/color/96/react-native.png",        type: 'code', level: 88 },
+            { name: "VS Code",     img: "https://img.icons8.com/fluency/96/visual-studio-code-2019.png", type: 'tool', level: 97 },
+            { name: "Git",         img: "https://img.icons8.com/color/96/git.png",                 type: 'tool', level: 90 }
         ]
     },
     'ai': {
         title: "Inteligencia Artificial", icon: 'fa-brain',
         items: [
-            { name: "ChatGPT",   img: "https://img.icons8.com/fluency/96/chatgpt.png",          type: 'tool' },
-            { name: "Gemini",    img: "https://img.icons8.com/fluency/96/google-logo.png",      type: 'tool' },
-            { name: "Claude",    img: "https://img.icons8.com/fluency/96/brain.png",            type: 'tool' },
-            { name: "Copilot",   img: "https://img.icons8.com/fluency/96/microsoft-copilot.png",type: 'tool' },
-            { name: "Midjourney",img: "https://img.icons8.com/fluency/96/midjourney.png",       type: 'tool' }
+            { name: "ChatGPT",   img: "https://img.icons8.com/fluency/96/chatgpt.png",          type: 'tool', level: 99, desc: "Dominio avanzado de prompts, automatización y GPTs." },
+            { name: "Gemini",    img: "https://img.icons8.com/fluency/96/google-logo.png",      type: 'tool', level: 97, desc: "Integración con ecosistema Google y razonamiento complejo." },
+            { name: "Claude",    img: "https://img.icons8.com/color/96/anthropic.png",          type: 'tool', level: 98, desc: "Análisis de documentos y escritura creativa con Claude 3." },
+            { name: "Perplexity",img: "https://img.icons8.com/fluency/96/search.png",             type: 'tool', level: 96, desc: "Investigación en tiempo real y curación de fuentes." },
+            { name: "NotebookLM",img: "https://img.icons8.com/fluency/96/google-docs.png",       type: 'tool', level: 95, desc: "Gestión de conocimiento y podcasts de IA." },
+            { name: "Midjourney",img: "https://img.icons8.com/fluency/96/midjourney.png",       type: 'tool', level: 94, desc: "Generación de arte e imágenes fotorrealistas." },
+            { name: "Leonardo AI",img: "https://img.icons8.com/fluency/96/paint-palette.png",    type: 'tool', level: 92, desc: "Generación de modelos consistentes y texturas." },
+            { name: "Gamma",     img: "https://img.icons8.com/fluency/96/presentation.png",     type: 'tool', level: 96, desc: "Creación de presentaciones y webs asistidas por IA." }
+        ]
+    },
+    'research': {
+        title: "Investigación y Estrategia", icon: 'fa-search',
+        items: [
+            { name: "Investigación Digital", img: "https://img.icons8.com/fluency/96/search.png", type: 'research', level: 97, desc: "Búsqueda avanzada, curación de contenido y verificación de fuentes." },
+            { name: "Análisis de Datos", img: "https://img.icons8.com/fluency/96/data-configuration.png", type: 'research', level: 92, desc: "Interpretación de métricas y tendencias para toma de decisiones." },
+            { name: "Metodologías Ágiles", img: "https://img.icons8.com/fluency/96/scrum-framework.png", type: 'research', level: 85, desc: "Gestión de proyectos con enfoque en resultados y eficiencia." },
+            { name: "Prompt Engineering", img: "https://img.icons8.com/fluency/96/artificial-intelligence.png", type: 'research', level: 99, desc: "Optimización de interacciones con LLMs para resultados precisos." }
+        ]
+    },
+    'disenos': {
+        title: "Mis Diseños", icon: 'fa-palette',
+        items: [
+            { name: "Portavoz.png", img: "image/DISEÑOS/PANTALLA GRANDE/portavoz.png", action: "PreviewApp.openImage('image/DISEÑOS/PANTALLA GRANDE/portavoz.png')", type: 'img' },
+            { name: "Post Invitación.png", img: "image/DISEÑOS/REDES/POST_INVITACIÓN.png", action: "PreviewApp.openImage('image/DISEÑOS/REDES/POST_INVITACIÓN.png')", type: 'img' }
+        ]
+    },
+    'webs': {
+        title: "Sitios Web", icon: 'fa-globe',
+        items: [
+            { name: "Kadajim Portfolio", img: "https://www.google.com/s2/favicons?domain=kadajim.online&sz=128", action: "Safari.open('https://www.kadajim.online/')", type: 'web' },
+            { name: "JSTenis Store", img: "https://www.google.com/s2/favicons?domain=jstenis.com&sz=128", action: "Safari.open('https://jstenis.com/')", type: 'web' },
+            { name: "ASCEP Org", img: "https://www.google.com/s2/favicons?domain=ascep.org&sz=128", action: "Safari.open('https://www.ascep.org/')", type: 'web' },
+            { name: "Bible Verbo AI", img: "https://www.google.com/s2/favicons?domain=bible-verbo.vercel.app&sz=128", action: "Safari.open('https://bible-verbo.vercel.app/')", type: 'web' },
+            { name: "Misión Juvenil D5", img: "https://www.google.com/s2/favicons?domain=misionjuvenild5.org&sz=128", action: "Safari.open('https://www.misionjuvenild5.org/')", type: 'web' }
         ]
     },
     'projects': {
@@ -316,15 +347,21 @@ function renderFinderContent() {
     const textSize = finderViewMode === 'small' ? 'text-[10px]' : 'text-xs';
 
     grid.className = `p-6 overflow-auto custom-scrollbar grid ${cols} content-start flex-1`;
-    grid.innerHTML = items.map(item => `
+    grid.innerHTML = items.map(item => {
+        const hasInfo = item.level !== undefined;
+        const clickAction = hasInfo ? `onclick="PreviewApp.openInfo('${item.name}')"` : '';
+        const dblAction = item.action ? `ondblclick="${item.action}"` : (hasInfo ? `ondblclick="PreviewApp.openInfo('${item.name}')"` : '');
+        
+        return `
         <div class="flex flex-col items-center gap-2 group cursor-pointer p-3 hover:bg-black/5 rounded-xl transition-all"
-            ${item.action ? `ondblclick="${item.action}"` : ''}>
-            <div class="${iconSize} flex items-center justify-center bg-white rounded-2xl shadow-sm group-hover:shadow-md transition-all p-1.5">
+            ${clickAction} ${dblAction}>
+            <div class="${iconSize} flex items-center justify-center bg-white rounded-2xl shadow-sm group-hover:shadow-md transition-all p-1.5 relative">
                 <img src="${item.img}" class="w-full h-full object-contain" onerror="this.src='https://img.icons8.com/color/96/image.png'">
+                ${hasInfo ? `<span class="absolute -top-1 -right-1 bg-blue-500 text-white text-[8px] font-bold px-1 rounded-full shadow-sm">${item.level}%</span>` : ''}
             </div>
             <span class="${textSize} font-medium text-center text-gray-700 w-full truncate px-1">${item.name}</span>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
 }
 
 // ─── Open Project in Safari ───────────────────────────────────────────────────

@@ -162,6 +162,56 @@ const PreviewApp = {
 
     openCV: () => {
         PreviewApp.open();
+    },
+
+    openImage: (src) => {
+        openApp('preview');
+        const content = document.getElementById('preview-content');
+        if (!content) return;
+        const titleEl = document.querySelector('#preview-window .window-header .flex-1');
+        if (titleEl) titleEl.innerText = src.split('/').pop();
+        
+        content.className = "w-full h-full bg-[#1e1e1e] flex items-center justify-center p-4";
+        content.innerHTML = `<img src="${src}" class="max-w-full max-h-full object-contain shadow-2xl rounded-lg">`;
+    },
+
+    openVideo: (src) => {
+        openApp('preview');
+        const content = document.getElementById('preview-content');
+        if (!content) return;
+        const titleEl = document.querySelector('#preview-window .window-header .flex-1');
+        if (titleEl) titleEl.innerText = src.split('/').pop();
+        
+        content.className = "w-full h-full bg-black flex items-center justify-center";
+        content.innerHTML = `<video src="${src}" controls autoplay class="max-w-full max-h-full"></video>`;
+    },
+
+    openInfo: (name) => {
+        // Search for item in folderData
+        let item = null;
+        Object.values(folderData).forEach(folder => {
+            const found = folder.items.find(i => i.name === name);
+            if (found) item = found;
+        });
+
+        if (!item || item.level === undefined) return;
+
+        openApp('info');
+        const win = document.getElementById('info-window');
+        if (!win) return;
+
+        document.getElementById('info-icon').src = item.img;
+        document.getElementById('info-name').innerText = item.name;
+        document.getElementById('info-type').innerText = item.type || 'HERRAMIENTA';
+        document.getElementById('info-desc').innerText = item.desc || 'Dominio y aplicación avanzada en proyectos profesionales.';
+        document.getElementById('info-level-text').innerText = item.level + '%';
+        
+        // Reset and animate bar
+        const bar = document.getElementById('info-level-bar');
+        bar.style.width = '0%';
+        setTimeout(() => {
+            bar.style.width = item.level + '%';
+        }, 100);
     }
 };
 

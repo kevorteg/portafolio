@@ -10,14 +10,42 @@ const Safari = {
 
     open: (url) => {
         openApp('safari');
-        const input = document.getElementById('safari-url-input');
-        const content = document.getElementById('safari-content-area');
-
-        if (input && url) input.value = url;
+        const display = document.getElementById('safari-url-display');
+        const favicon = document.getElementById('safari-favicon');
+        const content = document.querySelector('#safari-window .safari-content');
 
         if (url) {
-            if (content) content.innerHTML = `<iframe src="${url}" class="w-full h-full border-none bg-white"></iframe>`;
+            // Update display URL (Professional look)
+            if (display) {
+                let displayUrl = url.replace('https://', '').replace('http://', '').split('/')[0];
+                
+                // Specific mapping for portfolio projects
+                if (url.includes('kadajim')) displayUrl = 'kevinos.dev/kadajim';
+                else if (url.includes('jstenis')) displayUrl = 'kevinos.dev/jstenis';
+                else if (url.includes('ascep')) displayUrl = 'kevinos.dev/ascep';
+                else if (url.includes('bible-verbo')) displayUrl = 'kevinos.dev/bible-verbo';
+                else if (url.includes('misionjuvenild5')) displayUrl = 'kevinos.dev/misionjuvenil';
+                
+                display.innerText = displayUrl;
+                display.classList.remove('text-white/50');
+                display.classList.add('text-white');
+            }
+
+            // Update Favicon
+            if (favicon) {
+                favicon.src = `https://www.google.com/s2/favicons?domain=${url}&sz=32`;
+                favicon.classList.remove('hidden');
+            }
+
+            if (content) {
+                content.innerHTML = `<iframe src="${url}" class="w-full h-full border-none bg-white"></iframe>`;
+            }
         } else {
+            if (display) {
+                display.innerText = 'kevinos.dev';
+                display.classList.add('text-white/50');
+            }
+            if (favicon) favicon.classList.add('hidden');
             Safari.renderHome();
         }
     },

@@ -101,7 +101,6 @@ const Desktop = {
             if (!menu) return;
             menu.innerHTML = '';
 
-            const item = e.target.closest('.launchpad-item, .desktop-icon, [ondblclick]');
             const isDesktopIcon = e.target.closest('#desktop-icons > div');
 
             if (isDesktopIcon) {
@@ -110,35 +109,53 @@ const Desktop = {
                 menu.innerHTML = `
                     <div class="menu-item font-bold opacity-60 text-xs">${name}</div>
                     <div class="h-[0.5px] bg-white/10 my-1 mx-2"></div>
-                    <div class="menu-item" onclick="window.Notify && Notify.show('Acceso Directo', 'Movido al escritorio.', 'fa-check')"><i class="fas fa-desktop w-4"></i> Llevar al frente</div>
-                    <div class="menu-item" onclick="window.Notify && Notify.show('Dock', 'Fijado en el Dock.', 'fa-thumbtack')"><i class="fas fa-thumbtack w-4"></i> Fijar en Dock</div>
+                    <div class="menu-item" onclick="openApp('info'); PreviewApp.openInfo('${name}')">
+                        <i class="fas fa-info-circle w-4"></i> Obtener Información
+                    </div>
+                    <div class="menu-item" onclick="window.Notify && Notify.show('Fijado', '${name} fijado al Dock.', 'fa-thumbtack')">
+                        <i class="fas fa-thumbtack w-4"></i> Fijar en Dock
+                    </div>
                     <div class="h-[0.5px] bg-white/10 my-1 mx-2"></div>
-                    <div class="menu-item text-xs opacity-40 pl-8">KevinOS v4.0</div>
+                    <div class="menu-item text-red-400" onclick="this.parentElement.style.display='none'; window.Notify && Notify.show('Papelera', 'No tienes permisos para borrar archivos del sistema.', 'fa-trash')">
+                        <i class="fas fa-trash w-4 text-xs"></i> Mover a la Papelera
+                    </div>
                 `;
             } else {
                 // Desktop context menu
                 menu.innerHTML = `
+                    <div class="menu-item" onclick="window.Notify && Notify.show('Sistema', 'Nueva carpeta creada.', 'fa-folder-plus')">
+                        <i class="fas fa-folder-plus w-4 text-blue-400"></i> Nueva Carpeta
+                    </div>
+                    <div class="h-[0.5px] bg-white/10 my-1 mx-2"></div>
+                    
+                    <div class="menu-item menu-item-sub">
+                        <i class="fas fa-eye w-4"></i> Ver
+                        <i class="fas fa-chevron-right ml-auto text-[10px] opacity-40"></i>
+                        <div class="submenu">
+                            <div class="menu-item" onclick="Desktop.applyIconSize('large')"><i class="fas fa-th-large w-4"></i> Íconos Grandes</div>
+                            <div class="menu-item" onclick="Desktop.applyIconSize('medium')"><i class="fas fa-th w-4"></i> Íconos Medianos</div>
+                            <div class="menu-item" onclick="Desktop.applyIconSize('small')"><i class="fas fa-th-list w-4"></i> Íconos Pequeños</div>
+                        </div>
+                    </div>
+
+                    <div class="menu-item menu-item-sub">
+                        <i class="fas fa-sort-amount-down w-4"></i> Ordenar por
+                        <i class="fas fa-chevron-right ml-auto text-[10px] opacity-40"></i>
+                        <div class="submenu">
+                            <div class="menu-item" onclick="Desktop.sortIcons('asc')">Nombre</div>
+                            <div class="menu-item" onclick="Desktop.sortIcons('kind')">Clase</div>
+                            <div class="menu-item" onclick="Desktop.sortIcons('date')">Fecha de creación</div>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" onclick="window.location.reload()">
+                        <i class="fas fa-sync-alt w-4"></i> Actualizar
+                    </div>
+
+                    <div class="h-[0.5px] bg-white/10 my-1 mx-2"></div>
+
                     <div class="menu-item" onclick="nextWallpaper(); Desktop.savePref('wallpaperIndex', currentWallpaper)">
                         <i class="fas fa-image w-4"></i> Cambiar Fondo
-                    </div>
-
-                    <div class="menu-item menu-item-sub">
-                        <i class="fas fa-th-large w-4"></i> Tamaño de Íconos
-                        <i class="fas fa-chevron-right ml-auto text-[10px] opacity-40"></i>
-                        <div class="submenu">
-                            <div class="menu-item" onclick="Desktop.applyIconSize('large')"><i class="fas fa-expand-arrows-alt w-4"></i> Grande</div>
-                            <div class="menu-item" onclick="Desktop.applyIconSize('medium')"><i class="fas fa-th-large w-4"></i> Mediano</div>
-                            <div class="menu-item" onclick="Desktop.applyIconSize('small')"><i class="fas fa-compress-arrows-alt w-4"></i> Pequeño</div>
-                        </div>
-                    </div>
-
-                    <div class="menu-item menu-item-sub">
-                        <i class="fas fa-sort w-4"></i> Ordenar Íconos
-                        <i class="fas fa-chevron-right ml-auto text-[10px] opacity-40"></i>
-                        <div class="submenu">
-                            <div class="menu-item" onclick="Desktop.sortIcons('asc')"><i class="fas fa-sort-alpha-down w-4"></i> A → Z</div>
-                            <div class="menu-item" onclick="Desktop.sortIcons('desc')"><i class="fas fa-sort-alpha-up w-4"></i> Z → A</div>
-                        </div>
                     </div>
 
                     <div class="menu-item menu-item-sub">
@@ -154,7 +171,7 @@ const Desktop = {
                     <div class="h-[0.5px] bg-white/10 my-1 mx-2"></div>
 
                     <div class="menu-item" onclick="openApp('terminal')">
-                        <i class="fas fa-terminal w-4"></i> Abrir Terminal
+                        <i class="fas fa-terminal w-4"></i> Terminal
                     </div>
                     <div class="menu-item" onclick="openFolder('projects')">
                         <i class="fab fa-github w-4"></i> Proyectos GitHub
@@ -165,6 +182,10 @@ const Desktop = {
                     </div>
 
                     <div class="h-[0.5px] bg-white/10 my-1 mx-2"></div>
+
+                    <div class="menu-item" onclick="openApp('about')">
+                        <i class="fas fa-info-circle w-4"></i> Información del Sistema
+                    </div>
 
                     <div class="menu-item text-red-400" onclick="Desktop.logout()">
                         <i class="fas fa-sign-out-alt w-4"></i> Cerrar Sesión

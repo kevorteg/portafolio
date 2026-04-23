@@ -19,6 +19,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/core.css">
     <link rel="stylesheet" href="css/apps.css">
+    
+    <!-- Vercel Analytics -->
+    <script defer src="/_vercel/insights/script.js"></script>
 </head>
 
 <body onclick="hideAllModals()">
@@ -30,7 +33,7 @@
     <div id="boot-screen"
         class="fixed inset-0 bg-black z-[9999] flex flex-col items-center justify-center transition-opacity duration-1000">
         <div class="w-24 h-24 bg-white rounded-2xl flex items-center justify-center mb-8 animate-pulse">
-            <i class="fab fa-apple text-6xl text-black"></i>
+            <i class="fas fa-rocket text-5xl text-black"></i>
         </div>
         <div class="w-48 h-1.5 bg-gray-800 rounded-full overflow-hidden">
             <div class="h-full bg-white animate-[loading_2s_ease-in-out_forwards] w-0"></div>
@@ -90,9 +93,30 @@
     </div>
 
     <div id="context-menu" onclick="event.stopPropagation()">
-        <div class="menu-item" onclick="nextWallpaper()"><i class="fas fa-image"></i> Cambiar Fondo</div>
+        <div class="menu-item" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Actualizar</div>
         <div class="h-[0.5px] bg-white/10 my-1 mx-2"></div>
-        <div class="menu-item" onclick="openApp('about')"><i class="fas fa-info-circle"></i> Acerca de este OS</div>
+        <div class="menu-item group relative">
+            <i class="fas fa-th-large"></i> Ver
+            <i class="fas fa-chevron-right ml-auto text-[10px] opacity-40"></i>
+            <div class="absolute left-full top-0 ml-1 bg-[#252526]/95 backdrop-blur-xl border border-white/10 rounded-lg py-1 hidden group-hover:block w-32 shadow-xl">
+                <div class="menu-item" onclick="Desktop.applyIconSize('large')">Íconos grandes</div>
+                <div class="menu-item" onclick="Desktop.applyIconSize('medium')">Íconos medianos</div>
+                <div class="menu-item" onclick="Desktop.applyIconSize('small')">Íconos pequeños</div>
+            </div>
+        </div>
+        <div class="menu-item group relative">
+            <i class="fas fa-sort-alpha-down"></i> Ordenar por
+            <i class="fas fa-chevron-right ml-auto text-[10px] opacity-40"></i>
+            <div class="absolute left-full top-0 ml-1 bg-[#252526]/95 backdrop-blur-xl border border-white/10 rounded-lg py-1 hidden group-hover:block w-32 shadow-xl">
+                <div class="menu-item" onclick="Desktop.sortIcons('asc')">Nombre (A-Z)</div>
+                <div class="menu-item" onclick="Desktop.sortIcons('desc')">Nombre (Z-A)</div>
+            </div>
+        </div>
+        <div class="h-[0.5px] bg-white/10 my-1 mx-2"></div>
+        <div class="menu-item" onclick="nextWallpaper()"><i class="fas fa-image"></i> Cambiar Fondo</div>
+        <div class="menu-item" onclick="openApp('settings')"><i class="fas fa-cog"></i> Personalizar...</div>
+        <div class="h-[0.5px] bg-white/10 my-1 mx-2"></div>
+        <div class="menu-item" onclick="openApp('about')"><i class="fas fa-info-circle"></i> Acerca de KevinOS</div>
     </div>
 
     <div id="control-center" onclick="event.stopPropagation()">
@@ -167,6 +191,10 @@
                         class="fas fa-table-tennis text-3xl"></i></div>
                 <span class="text-white text-sm">Pong</span>
             </div>
+            <div class="launchpad-item" onclick="openApp('snake'); SnakeGame.init();">
+                <div class="launchpad-icon bg-green-600 text-white"><i class="fas fa-staff-snake text-3xl"></i></div>
+                <span class="text-white text-sm">Snake</span>
+            </div>
             <div class="launchpad-item" onclick="openApp('tetris')">
                 <div class="launchpad-icon bg-purple-700 text-white"><i class="fas fa-cubes text-3xl"></i></div>
                 <span class="text-white text-sm">Tetris</span>
@@ -179,57 +207,73 @@
 
 
             <!-- Design Apps -->
-            <div class="launchpad-item"
-                onclick="openInfo('Photoshop', 'Editor de graficos rasterizados lider en la industria.', 'adobe-photoshop')">
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('Photoshop')">
                 <img src="https://img.icons8.com/fluency/96/adobe-photoshop.png" class="launchpad-icon">
                 <span class="text-white text-sm">Photoshop</span>
             </div>
-            <div class="launchpad-item"
-                onclick="openInfo('Illustrator', 'Editor de graficos vectoriales estandar.', 'adobe-illustrator')">
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('Illustrator')">
                 <img src="https://img.icons8.com/fluency/96/adobe-illustrator.png" class="launchpad-icon">
                 <span class="text-white text-sm">Illustrator</span>
             </div>
-            <div class="launchpad-item"
-                onclick="openInfo('Blender', 'Suite de creacion 3D gratuita y de codigo abierto.', 'blender-3d')">
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('Blender')">
                 <img src="https://img.icons8.com/fluency/96/blender-3d.png" class="launchpad-icon">
                 <span class="text-white text-sm">Blender</span>
             </div>
-            <div class="launchpad-item"
-                onclick="openInfo('Premiere', 'Software de edicion de video profesional.', 'adobe-premiere-pro')">
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('Premiere')">
                 <img src="https://img.icons8.com/fluency/96/adobe-premiere-pro.png" class="launchpad-icon">
                 <span class="text-white text-sm">Premiere</span>
             </div>
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('DaVinci')">
+                <img src="https://img.icons8.com/fluency/96/video-editing.png" class="launchpad-icon">
+                <span class="text-white text-sm">DaVinci</span>
+            </div>
 
             <!-- Programming -->
-            <div class="launchpad-item"
-                onclick="openInfo('HTML5', 'Lenguaje de marcado para la estructura web.', 'html-5--v1')">
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('HTML5')">
                 <img src="https://img.icons8.com/color/96/html-5--v1.png" class="launchpad-icon">
                 <span class="text-white text-sm">HTML</span>
             </div>
-            <div class="launchpad-item"
-                onclick="openInfo('CSS3', 'Lenguaje de diseño grafico para definir la presentacion.', 'css3')">
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('CSS3')">
                 <img src="https://img.icons8.com/color/96/css3.png" class="launchpad-icon">
                 <span class="text-white text-sm">CSS</span>
             </div>
-            <div class="launchpad-item"
-                onclick="openInfo('JavaScript', 'Lenguaje de programacion interpretado para la web.', 'javascript--v1')">
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('JavaScript')">
                 <img src="https://img.icons8.com/color/96/javascript--v1.png" class="launchpad-icon">
                 <span class="text-white text-sm">JS</span>
             </div>
-            <div class="launchpad-item"
-                onclick="openInfo('Python', 'Lenguaje de alto nivel para proposito general.', 'python--v1')">
-                <img src="https://img.icons8.com/color/96/python--v1.png" class="launchpad-icon">
-                <span class="text-white text-sm">Python</span>
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('React')">
+                <img src="https://img.icons8.com/color/96/react-native.png" class="launchpad-icon">
+                <span class="text-white text-sm">React</span>
             </div>
-            <div class="launchpad-item"
-                onclick="openInfo('VS Code', 'Editor de codigo fuente desarrollado por Microsoft.', 'visual-studio-code-2019')">
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('VS Code')">
                 <img src="https://img.icons8.com/fluency/96/visual-studio-code-2019.png" class="launchpad-icon">
                 <span class="text-white text-sm">VS Code</span>
             </div>
 
-            <!-- AI -->
+            <!-- AI Models -->
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('ChatGPT')">
+                <img src="https://img.icons8.com/fluency/96/chatgpt.png" class="launchpad-icon">
+                <span class="text-white text-sm">ChatGPT</span>
+            </div>
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('Claude')">
+                <img src="https://img.icons8.com/color/96/anthropic.png" class="launchpad-icon">
+                <span class="text-white text-sm">Claude</span>
+            </div>
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('Perplexity')">
+                <img src="https://img.icons8.com/fluency/96/search.png" class="launchpad-icon">
+                <span class="text-white text-sm">Perplexity</span>
+            </div>
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('NotebookLM')">
+                <img src="https://img.icons8.com/fluency/96/google-docs.png" class="launchpad-icon">
+                <span class="text-white text-sm">NotebookLM</span>
+            </div>
+            <div class="launchpad-item" onclick="PreviewApp.openInfo('Midjourney')">
+                <img src="https://img.icons8.com/fluency/96/midjourney.png" class="launchpad-icon">
+                <span class="text-white text-sm">Midjourney</span>
+            </div>
+            
             <div class="launchpad-item" onclick="openApp('chatbot')">
-                <div class="launchpad-icon bg-gradient-to-tr from-purple-500 to-indigo-600 text-white"><i
+                <div class="launchpad-icon bg-gradient-to-tr from-purple-500 to-indigo-600 text-white shadow-lg"><i
                         class="fas fa-robot text-4xl"></i></div>
                 <span class="text-white text-sm">KevinBot</span>
             </div>
@@ -258,7 +302,7 @@
         <!-- Top Bar -->
         <div class="top-bar">
             <div class="flex items-center gap-4">
-                <i class="fab fa-apple text-lg cursor-pointer hover:opacity-80"
+                <i class="fas fa-rocket text-lg cursor-pointer hover:opacity-80"
                     onclick="event.stopPropagation(); openApp('about')"></i>
                 <span class="font-bold cursor-default">Portafolio</span>
                 <span class="cursor-default hidden sm:block">Archivo</span>
@@ -289,8 +333,8 @@
             </div>
         </div>
 
-        <!-- Desktop Icons (Moved to Left) -->
-        <div class="absolute top-20 left-6 flex flex-col gap-10 items-start pointer-events-auto z-0" id="desktop-icons">
+        <!-- Desktop Icons (Organized in columns) -->
+        <div class="absolute top-20 left-6 grid grid-flow-col grid-rows-[repeat(auto-fill,100px)] gap-x-4 gap-y-2 items-start pointer-events-auto z-0" id="desktop-icons" style="height: calc(100vh - 160px);">
             <!-- About Me (First as requested) -->
             <div class="flex flex-col items-center gap-1 group cursor-pointer w-20" ondblclick="openFolder('about')">
                 <div class="w-16 h-14 rounded-lg flex items-center justify-center transition-colors">
@@ -303,13 +347,23 @@
             </div>
 
             <!-- Design -->
-            <div class="flex flex-col items-center gap-1 group cursor-pointer w-20" ondblclick="openFolder('design')">
+            <div class="flex flex-col items-center gap-1 group cursor-pointer w-20" ondblclick="openFolder('disenos')">
                 <div class="w-16 h-14 rounded-lg flex items-center justify-center transition-colors">
                     <img src="https://img.icons8.com/fluency/96/folder-invoices.png"
                         class="w-full h-full object-contain">
                 </div>
                 <span
                     class="text-white text-xs font-medium shadow-black/50 text-shadow text-center leading-tight bg-black/20 px-2 py-0.5 rounded-md backdrop-blur-sm">Diseño</span>
+            </div>
+
+            <!-- Webs -->
+            <div class="flex flex-col items-center gap-1 group cursor-pointer w-20" ondblclick="openFolder('webs')">
+                <div class="w-16 h-14 rounded-lg flex items-center justify-center transition-colors">
+                    <img src="https://img.icons8.com/fluency/96/folder-invoices.png"
+                        class="w-full h-full object-contain">
+                </div>
+                <span
+                    class="text-white text-xs font-medium shadow-black/50 text-shadow text-center leading-tight bg-black/20 px-2 py-0.5 rounded-md backdrop-blur-sm">Webs</span>
             </div>
 
             <!-- Programming -->
@@ -707,7 +761,10 @@
                 <div class="light light-max" onclick="maximizeApp('safari')"><i class="fas fa-expand"></i></div>
             </div>
             <div class="bg-white/10 rounded-lg h-6 flex items-center px-4 text-[10px] text-white/50 ml-4 flex-1">
-                kevinos.dev</div>
+                <i class="fas fa-lock mr-2 text-[8px] opacity-30"></i>
+                <img id="safari-favicon" src="https://img.icons8.com/fluency/48/globe.png" class="w-3 h-3 mr-2 hidden">
+                <span id="safari-url-display">kevinos.dev</span>
+            </div>
         </div>
         <div class="safari-content overflow-auto custom-scrollbar bg-white h-full">
             <!-- Dynamic Content -->
@@ -833,8 +890,32 @@
         </div>
     </div>
 
-    <!-- Info Popups (Reusing About Window or similar generic) -->
-    <div id="info-window" class="window" style="width: 400px; height: 350px; top: 200px; left: 400px;"
+    <!-- Snake Game -->
+    <div id="snake-window" class="window" style="width: 440px; height: 520px; top: 100px; left: 150px;"
+        onmousedown="focusApp('snake')">
+        <div class="window-header" onmousedown="dragElement(this.parentElement)">
+            <div class="traffic-lights">
+                <div class="light light-close" onclick="closeApp('snake'); SnakeGame.close()"><i class="fas fa-times"></i></div>
+            </div>
+            <div class="flex-1 text-center text-xs font-bold opacity-30">Snake OS</div>
+        </div>
+        <div class="flex flex-col h-full bg-[#0f172a] text-white overflow-hidden">
+            <div class="p-4 flex justify-between items-center border-b border-white/5 bg-[#1e293b]">
+                <div class="text-sm font-bold text-blue-400">
+                    <i class="fas fa-trophy mr-2"></i>Puntaje: <span id="snake-score">0</span>
+                    <span class="mx-2 opacity-20">|</span>
+                    <i class="fas fa-crown text-yellow-500 mr-1"></i>Record: <span id="snake-high-score">0</span>
+                </div>
+                <button onclick="SnakeGame.init()" class="px-4 py-1.5 bg-blue-600 rounded-full text-xs font-bold hover:bg-blue-500 transition shadow-lg shadow-blue-900/20">Reiniciar</button>
+            </div>
+            <div class="flex-1 flex items-center justify-center p-4">
+                <canvas id="snake-canvas" width="400" height="400" class="rounded shadow-2xl border border-white/10 bg-black"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Popups (Unified) -->
+    <div id="info-window" class="window hidden" style="width: 400px; height: auto; top: 200px; left: 400px;"
         onmousedown="focusApp('info')">
         <div class="window-header" onmousedown="dragElement(this.parentElement)">
             <div class="traffic-lights">
@@ -842,9 +923,12 @@
             </div>
             <div class="flex-1 text-center text-xs font-bold opacity-30">Información</div>
         </div>
-        <div class="p-8 text-center flex flex-col items-center bg-white h-full text-gray-800">
+        <div class="p-8 text-center flex flex-col items-center bg-white h-full text-gray-800 rounded-b-xl">
             <img id="info-icon" src="" class="w-24 h-24 mb-6 object-contain">
             <h2 id="info-title" class="text-2xl font-bold mb-2">Title</h2>
+            <div class="w-full bg-gray-100 rounded-full h-2 mb-4 hidden" id="info-level-container">
+                <div id="info-level-bar" class="bg-blue-500 h-2 rounded-full" style="width: 0%"></div>
+            </div>
             <p id="info-desc" class="text-sm opacity-70">Description goes here.</p>
         </div>
     </div>
@@ -931,6 +1015,11 @@
             <div class="dock-icon bg-purple-700 text-white"><i class="fas fa-cubes text-2xl"></i></div>
             <div class="indicator" id="ind-tetris"></div>
         </div>
+        <div class="dock-item" onclick="openApp('snake'); SnakeGame.init();">
+            <div class="dock-tooltip">Snake</div>
+            <div class="dock-icon bg-green-600 text-white flex items-center justify-center"><i class="fas fa-staff-snake text-2xl"></i></div>
+            <div class="indicator" id="ind-snake"></div>
+        </div>
         <div class="dock-item" onclick="openApp('music')">
             <div class="dock-tooltip">Música</div>
             <div class="dock-icon bg-red-500 text-white"><i class="fab fa-spotify text-2xl"></i></div>
@@ -949,6 +1038,8 @@
             <div class="dock-icon bg-gray-900 text-white"><i class="fab fa-github text-2xl"></i></div>
             <div class="indicator" id="ind-projects"></div>
         </div>
+    </div>
+
     </div>
 
     </div>
@@ -1051,30 +1142,160 @@
                 </div>
             </div>
 
+            <!-- Projects & Webs (New Section) -->
+            <div class="bg-[#151517] border border-white/5 rounded-2xl p-5 shadow-lg">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-white">
+                    <i class="fas fa-globe text-blue-400"></i> Proyectos Web
+                </h2>
+                <div class="grid grid-cols-1 gap-3">
+                    <a href="https://www.kadajim.online/" target="_blank" class="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5 active:scale-95 transition-transform">
+                        <img src="https://www.google.com/s2/favicons?domain=kadajim.online&sz=64" class="w-8 h-8 rounded">
+                        <div>
+                            <h3 class="text-sm font-bold text-white">Kadajim Portfolio</h3>
+                            <p class="text-[10px] text-gray-400">Portafolio para cliente</p>
+                        </div>
+                        <i class="fas fa-external-link-alt ml-auto text-xs text-gray-600"></i>
+                    </a>
+                    <a href="https://jstenis.com/" target="_blank" class="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5 active:scale-95 transition-transform">
+                        <img src="https://www.google.com/s2/favicons?domain=jstenis.com&sz=64" class="w-8 h-8 rounded">
+                        <div>
+                            <h3 class="text-sm font-bold text-white">JSTenis Store</h3>
+                            <p class="text-[10px] text-gray-400">E-commerce de calzado</p>
+                        </div>
+                        <i class="fas fa-external-link-alt ml-auto text-xs text-gray-600"></i>
+                    </a>
+                    <a href="https://www.ascep.org/" target="_blank" class="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5 active:scale-95 transition-transform">
+                        <img src="https://www.google.com/s2/favicons?domain=ascep.org&sz=64" class="w-8 h-8 rounded">
+                        <div>
+                            <h3 class="text-sm font-bold text-white">ASCEP</h3>
+                            <p class="text-[10px] text-gray-400">Organización social</p>
+                        </div>
+                        <i class="fas fa-external-link-alt ml-auto text-xs text-gray-600"></i>
+                    </a>
+                    <a href="https://bible-verbo.vercel.app/" target="_blank" class="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5 active:scale-95 transition-transform">
+                        <img src="https://www.google.com/s2/favicons?domain=bible-verbo.vercel.app&sz=64" class="w-8 h-8 rounded">
+                        <div>
+                            <h3 class="text-sm font-bold text-white">Bible Verbo AI</h3>
+                            <p class="text-[10px] text-gray-400">App web con IA</p>
+                        </div>
+                        <i class="fas fa-external-link-alt ml-auto text-xs text-gray-600"></i>
+                    </a>
+                    <a href="https://www.misionjuvenild5.org/" target="_blank" class="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5 active:scale-95 transition-transform">
+                        <img src="https://www.google.com/s2/favicons?domain=misionjuvenild5.org&sz=64" class="w-8 h-8 rounded">
+                        <div>
+                            <h3 class="text-sm font-bold text-white">Misión Juvenil</h3>
+                            <p class="text-[10px] text-gray-400">Grupo juvenil IPUC</p>
+                        </div>
+                        <i class="fas fa-external-link-alt ml-auto text-xs text-gray-600"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- AI & Future Tech (New Section) -->
+            <div class="bg-[#151517] border border-white/5 rounded-2xl p-5 shadow-lg">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-white">
+                    <i class="fas fa-brain text-purple-400"></i> Inteligencia Artificial
+                </h2>
+                <div class="space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <img src="https://img.icons8.com/fluency/48/chatgpt.png" class="w-5 h-5">
+                                <span class="text-sm text-gray-200">ChatGPT / GPT-4</span>
+                            </div>
+                            <span class="text-xs text-purple-400 font-bold">99%</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-purple-500 to-blue-500 w-[99%]"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <img src="https://img.icons8.com/color/48/anthropic.png" class="w-5 h-5">
+                                <span class="text-sm text-gray-200">Claude 3.5 Sonnet / Opus</span>
+                            </div>
+                            <span class="text-xs text-purple-400 font-bold">98%</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-purple-500 to-blue-500 w-[98%]"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <img src="https://img.icons8.com/fluency/48/google-logo.png" class="w-5 h-5">
+                                <span class="text-sm text-gray-200">NotebookLM / Gemini 1.5</span>
+                            </div>
+                            <span class="text-xs text-purple-400 font-bold">97%</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-purple-500 to-blue-500 w-[97%]"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <img src="https://img.icons8.com/fluency/48/search-more.png" class="w-5 h-5">
+                                <span class="text-sm text-gray-200">Perplexity / AI Research</span>
+                            </div>
+                            <span class="text-xs text-purple-400 font-bold">96%</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-purple-500 to-blue-500 w-[96%]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Software Suite (New Section) -->
+            <div class="bg-[#151517] border border-white/5 rounded-2xl p-5 shadow-lg">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-white">
+                    <i class="fas fa-layer-group text-orange-400"></i> Software Suite
+                </h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1">
+                        <span class="text-[10px] text-gray-500 uppercase font-bold">Adobe Suite</span>
+                        <div class="flex gap-1">
+                            <img src="https://img.icons8.com/fluency/48/adobe-photoshop.png" class="w-6 h-6">
+                            <img src="https://img.icons8.com/fluency/48/adobe-illustrator.png" class="w-6 h-6">
+                            <img src="https://img.icons8.com/fluency/48/adobe-premiere-pro.png" class="w-6 h-6">
+                        </div>
+                        <span class="text-xs text-white font-medium">95% Mastery</span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="text-[10px] text-gray-500 uppercase font-bold">3D & Video</span>
+                        <div class="flex gap-1">
+                            <img src="https://img.icons8.com/fluency/48/blender-3d.png" class="w-6 h-6">
+                            <img src="https://img.icons8.com/fluency/48/video-editing.png" class="w-6 h-6">
+                        </div>
+                        <span class="text-xs text-white font-medium">88% Mastery</span>
+                    </div>
+                </div>
+            </div>
+
             <!-- Skills Section -->
             <div class="bg-[#151517] border border-white/5 rounded-2xl p-5 shadow-lg">
                 <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-white">
-                    <i class="fas fa-code text-green-500"></i> Habilidades
+                    <i class="fas fa-code text-green-500"></i> Habilidades Técnicas
                 </h2>
                 <div class="space-y-4">
                     <div>
-                        <h3 class="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Técnicas
-                        </h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-2 py-1 bg-white/5 rounded text-xs text-gray-300">HTML/CSS</span>
-                            <span class="px-2 py-1 bg-white/5 rounded text-xs text-gray-300">JavaScript</span>
-                            <span class="px-2 py-1 bg-white/5 rounded text-xs text-gray-300">Python</span>
-                            <span class="px-2 py-1 bg-white/5 rounded text-xs text-gray-300">React/Node</span>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-xs text-gray-300">Desarrollo Frontend (React/JS)</span>
+                            <span class="text-xs text-green-400">94%</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-green-500 w-[94%]"></div>
                         </div>
                     </div>
                     <div>
-                        <h3 class="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Creativas
-                        </h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-2 py-1 bg-white/5 rounded text-xs text-gray-300">Diseño
-                                Gráfico</span>
-                            <span class="px-2 py-1 bg-white/5 rounded text-xs text-gray-300">Branding</span>
-                            <span class="px-2 py-1 bg-white/5 rounded text-xs text-gray-300">Copywriting</span>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-xs text-gray-300">Investigación & Análisis</span>
+                            <span class="text-xs text-green-400">97%</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-green-500 w-[97%]"></div>
                         </div>
                     </div>
                 </div>
@@ -1188,6 +1409,7 @@
 
 
 <script src="js/apps/pong.js"></script>
+<script src="js/apps/snake.js"></script>
 <script src="js/apps/preview.js"></script>
 
 <!-- Main Init -->
