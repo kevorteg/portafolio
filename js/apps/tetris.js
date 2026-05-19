@@ -54,7 +54,8 @@ function startTetris() {
     if (gameInterval) clearInterval(gameInterval);
     gameInterval = setInterval(gameLoop, 1000 / level);
 
-    // Controls
+    // Controls: Remove first to prevent duplicates, then add
+    document.removeEventListener('keydown', handleTetrisInput);
     document.addEventListener('keydown', handleTetrisInput);
 }
 
@@ -224,5 +225,13 @@ function drawBlock(x, y, color) {
     tCtx.strokeStyle = 'rgba(0,0,0,0.5)';
     tCtx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
 }
+
+function closeTetris() {
+    if (gameInterval) clearInterval(gameInterval);
+    document.removeEventListener('keydown', handleTetrisInput);
+}
+
+// Bind globally
+window.closeTetris = closeTetris;
 
 document.addEventListener('DOMContentLoaded', initTetris);

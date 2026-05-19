@@ -44,6 +44,19 @@ function openApp(appId) {
 function closeApp(appId) {
     const win = document.getElementById(appId + '-window');
     if (!win) return;
+
+    // Trigger cleanup hooks if they exist to prevent leaks/sound playing in background
+    if (appId === 'music' && typeof window.pauseTrack === 'function') {
+        window.pauseTrack();
+    } else if (appId === 'tetris' && typeof window.closeTetris === 'function') {
+        window.closeTetris();
+    } else if (appId === 'snake' && window.SnakeGame && typeof window.SnakeGame.close === 'function') {
+        window.SnakeGame.close();
+    } else if (appId === 'pong' && window.pongGame && window.pongGame.isRunning) {
+        window.pongGame.isRunning = false;
+        if (window.pongGame.interval) clearInterval(window.pongGame.interval);
+    }
+
     // Hide snap zones in case they appear
     hideSnapZones();
     win.classList.add('window-closing');

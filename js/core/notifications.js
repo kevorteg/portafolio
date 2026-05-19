@@ -110,4 +110,9 @@ function startVerseScheduler() {
 
 window.testNotif = () => showNotification("Test", "Esto es una prueba de notificación.", "fas fa-vial");
 
+// Bind globally so other files (e.g. notes.js, mail.js, etc.) can trigger notifications
+window.Notify = {
+    show: showNotification
+};
+
 document.addEventListener('DOMContentLoaded', startVerseScheduler);

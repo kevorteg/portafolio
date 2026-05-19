@@ -2,10 +2,10 @@ const Safari = {
     currentUrl: 'https://kevin.dev',
     // These could be your real projects
     favorites: [
-        { name: 'Github', url: 'https://github.com', icon: 'fa-github' },
-        { name: 'Portfolio', url: 'index.html', icon: 'fa-user' },
-        { name: 'Google', url: 'https://google.com', icon: 'fa-google' },
-        { name: 'Dribbble', url: 'https://dribbble.com', icon: 'fa-basketball-ball' }
+        { name: 'Github', url: 'https://github.com', icon: 'fab fa-github' },
+        { name: 'Portfolio', url: 'index.html', icon: 'fas fa-user' },
+        { name: 'Google', url: 'https://google.com', icon: 'fab fa-google' },
+        { name: 'Dribbble', url: 'https://dribbble.com', icon: 'fas fa-basketball-ball' }
     ],
 
     open: (url) => {
@@ -99,7 +99,7 @@ const Safari = {
                         ${Safari.favorites.map(f => `
                             <div onclick="Safari.open('${f.url}')" class="group flex flex-col items-center gap-3 cursor-pointer p-4 rounded-xl hover:bg-white/5 transition border border-transparent hover:border-white/5">
                                 <div class="w-14 h-14 rounded-full bg-gray-800 flex items-center justify-center text-xl text-gray-300 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-lg">
-                                    <i class="fab ${f.icon}"></i>
+                                    <i class="${f.icon}"></i>
                                 </div>
                                 <span class="text-xs font-medium text-gray-500 group-hover:text-white transition">${f.name}</span>
                             </div>

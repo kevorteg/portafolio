@@ -22,6 +22,7 @@ const musicData = [
 let currentTrackIndex = 0;
 let isPlaying = false;
 let audio = new Audio();
+window.musicAudio = audio;
 
 function initMusicPlayer() {
     renderPlaylist();
@@ -147,5 +148,7 @@ function updateViz() {
         bar.style.height = `${h}%`;
     });
 }
+
+window.pauseTrack = pauseTrack;
 
 document.addEventListener('DOMContentLoaded', initMusicPlayer);

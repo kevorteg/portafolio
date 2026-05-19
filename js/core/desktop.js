@@ -10,6 +10,7 @@ const Desktop = {
         Desktop.checkAuth();
         Desktop.setupContextMenu();
         Desktop.applyPrefs();
+        Desktop.initDragAndDrop();
     },
 
     // ── Preferencias (memoria) ──────────────────────────────────────────────
@@ -294,5 +295,7 @@ function openInfo(title, desc, iconName) {
         win.querySelector('#info-desc').innerText = desc;
         const iconImg = win.querySelector('#info-icon');
         if (iconImg) iconImg.src = iconName.includes('http') ? iconName : `https://img.icons8.com/fluency/96/${iconName}.png`;
+        const lvlContainer = win.querySelector('#info-level-container');
+        if (lvlContainer) lvlContainer.classList.add('hidden');
     }, 200);
 }

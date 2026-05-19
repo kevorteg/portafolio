@@ -73,7 +73,23 @@ function calcCmd(cmd) {
         return;
     }
 
-    if (cmd === '+/-') { return; } // TODO
+    if (cmd === '+/-') {
+        if (!calcInput) return;
+        // Match the last number (with optional decimal point) at the end of the expression
+        const match = calcInput.match(/(-?[\d.]+)\s*$/);
+        if (match) {
+            const numStr = match[1];
+            let negated;
+            if (numStr.startsWith('-')) {
+                negated = numStr.substring(1);
+            } else {
+                negated = '-' + numStr;
+            }
+            calcInput = calcInput.substring(0, calcInput.length - numStr.length) + negated;
+            display.innerText = calcInput;
+        }
+        return;
+    }
     if (cmd === '%') { calcInput += "/100"; }
     else if (['+', '-', '*', '/'].includes(cmd)) { calcInput += cmd; }
     else { calcInput += cmd; }

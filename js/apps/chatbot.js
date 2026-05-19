@@ -113,13 +113,16 @@ function getBotResponse(input) {
         return "¡Tetris! Acomodando bloques... 🧱";
     }
     if (msg.includes('snake') || msg.includes('culebrita')) {
-        setTimeout(() => openApp('tetris'), 800);
-        return "Snake se jubiló, pero te abro Tetris que está genial. 🧱";
+        setTimeout(() => {
+            openApp('snake');
+            if (window.SnakeGame) window.SnakeGame.init();
+        }, 800);
+        return "¡Culebrita! Preparando la comida... 🐍";
     }
 
     // Generic Game Request
     if (msg.includes('jugar') || msg.includes('game') || msg.includes('juego')) {
-        return "¡Diversión! Escribe **'Pong'** o **'Tetris'** para empezar. 🎮";
+        return "¡Diversión! Escribe **'Pong'**, **'Tetris'** o **'Snake'** para empezar. 🎮";
     }
 
     // MAIL

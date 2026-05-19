@@ -18,9 +18,9 @@ function setupSliders() {
 
     if (volume) {
         volume.addEventListener('input', (e) => {
-            if (window.Notify) {
-                // Throttle notifications? Or just update icon
-                // For now, no action, just visual
+            const val = e.target.value / 100;
+            if (window.musicAudio) {
+                window.musicAudio.volume = val;
             }
         });
 

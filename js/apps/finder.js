@@ -101,12 +101,12 @@ const folderData = {
     'ai': {
         title: "Inteligencia Artificial", icon: 'fa-brain',
         items: [
-            { name: "ChatGPT",   img: "https://img.icons8.com/fluency/96/chatgpt.png",          type: 'tool', level: 99, desc: "Dominio avanzado de prompts, automatización y GPTs." },
-            { name: "Gemini",    img: "https://img.icons8.com/fluency/96/google-logo.png",      type: 'tool', level: 97, desc: "Integración con ecosistema Google y razonamiento complejo." },
-            { name: "Claude",    img: "https://img.icons8.com/color/96/anthropic.png",          type: 'tool', level: 98, desc: "Análisis de documentos y escritura creativa con Claude 3." },
-            { name: "Perplexity",img: "https://img.icons8.com/fluency/96/search.png",             type: 'tool', level: 96, desc: "Investigación en tiempo real y curación de fuentes." },
-            { name: "NotebookLM",img: "https://img.icons8.com/fluency/96/google-docs.png",       type: 'tool', level: 95, desc: "Gestión de conocimiento y podcasts de IA." },
-            { name: "Midjourney",img: "https://img.icons8.com/fluency/96/midjourney.png",       type: 'tool', level: 94, desc: "Generación de arte e imágenes fotorrealistas." },
+            { name: "ChatGPT",   img: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/openai.svg",          type: 'tool', level: 99, desc: "Dominio avanzado de prompts, automatización y GPTs." },
+            { name: "Gemini",    img: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/gemini-color.svg",      type: 'tool', level: 97, desc: "Integración con ecosistema Google y razonamiento complejo." },
+            { name: "Claude",    img: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/claude-color.svg",          type: 'tool', level: 98, desc: "Análisis de documentos y escritura creativa con Claude 3." },
+            { name: "Perplexity",img: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/perplexity-color.svg",             type: 'tool', level: 96, desc: "Investigación en tiempo real y curación de fuentes." },
+            { name: "NotebookLM",img: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/notebooklm.svg",       type: 'tool', level: 95, desc: "Gestión de conocimiento y podcasts de IA." },
+            { name: "Midjourney",img: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/midjourney.svg",       type: 'tool', level: 94, desc: "Generación de arte e imágenes fotorrealistas." },
             { name: "Leonardo AI",img: "https://img.icons8.com/fluency/96/paint-palette.png",    type: 'tool', level: 92, desc: "Generación de modelos consistentes y texturas." },
             { name: "Gamma",     img: "https://img.icons8.com/fluency/96/presentation.png",     type: 'tool', level: 96, desc: "Creación de presentaciones y webs asistidas por IA." }
         ]
@@ -132,6 +132,7 @@ const folderData = {
         items: [
             { name: "Kadajim Portfolio", img: "https://www.google.com/s2/favicons?domain=kadajim.online&sz=128", action: "Safari.open('https://www.kadajim.online/')", type: 'web' },
             { name: "JSTenis Store", img: "https://www.google.com/s2/favicons?domain=jstenis.com&sz=128", action: "Safari.open('https://jstenis.com/')", type: 'web' },
+            { name: "FFF Cali", img: "https://www.google.com/s2/favicons?domain=fffcali.org&sz=128", action: "Safari.open('https://www.fffcali.org/')", type: 'web' },
             { name: "ASCEP Org", img: "https://www.google.com/s2/favicons?domain=ascep.org&sz=128", action: "Safari.open('https://www.ascep.org/')", type: 'web' },
             { name: "Bible Verbo AI", img: "https://www.google.com/s2/favicons?domain=bible-verbo.vercel.app&sz=128", action: "Safari.open('https://bible-verbo.vercel.app/')", type: 'web' },
             { name: "Misión Juvenil D5", img: "https://www.google.com/s2/favicons?domain=misionjuvenild5.org&sz=128", action: "Safari.open('https://www.misionjuvenild5.org/')", type: 'web' }

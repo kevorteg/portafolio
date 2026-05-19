@@ -312,7 +312,7 @@ function triggerSelfDestruct(log) {
     let delay = 0;
     messages.forEach((msg, i) => {
         setTimeout(() => {
-            log.innerHTML += `< div class= "mb-1 text-red-600 font-bold font-mono uppercase bg-black/50 p-1" > ${msg}</div > `;
+            log.innerHTML += `<div class="mb-1 text-red-600 font-bold font-mono uppercase bg-black/50 p-1"> ${msg}</div>`;
             document.getElementById('terminal-output').scrollTop = document.getElementById('terminal-output').scrollHeight;
         }, delay);
         delay += 800;
@@ -327,12 +327,12 @@ function triggerSelfDestruct(log) {
 
     setTimeout(() => {
         document.body.innerHTML = `
-    < div style = "height:100vh; background:black; color:#0f0; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:monospace; padding-top:20vh;" >
+    <div style="height:100vh; background:black; color:#0f0; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:monospace; padding-top:20vh;">
                 <h1 style="font-size:4rem; color:red;">SYSTEM FAILURE</h1>
                 <p>Todo ha sido eliminado.</p>
                 <p style="margin-top:2rem; color:white;">Es broma. 🤡</p>
                 <button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; background:#333; color:white; border:1px solid #555; cursor:pointer;">RESTAURAR SISTEMA</button>
-            </div >
+            </div>
         `;
     }, 5000);
 }
@@ -565,12 +565,12 @@ function triggerHackMeEffect(logElement) {
             setTimeout(() => {
                 // The Reveal
                 overlay.innerHTML = `
-        < div class= "text-center p-10" >
+        <div class="text-center p-10">
                         <div class="text-8xl mb-4">🤡</div>
                         <h1 class="text-4xl text-green-500 font-bold mb-4">¡CAÍSTE!</h1>
                         <p class="text-white text-xl">Tu sistema está seguro. (Creo).</p>
                         <button id="hack-close-btn" class="mt-8 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-500">Volver a respirar</button>
-                    </div >
+                    </div>
         `;
 
                 document.getElementById('hack-close-btn').onclick = () => {
